@@ -1,0 +1,29 @@
+
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: calc(100% - 7rem);
+    height: 7rem;
+    padding: 0 4rem;
+
+    -webkit-backdrop-filter: blur(22px);
+    backdrop-filter: blur(22px);
+    z-index: 999;
+    &__title-area {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    &__tools-area {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: min-content min-content;
+        align-items: center;
+        
+    }
+}

@@ -1,0 +1,111 @@
+//Generic Tooltop
+.popper-tooltip {
+    z-index: 90;
+    background-color: var(--color-paper-light);
+    border: 1px solid var(--color-paper-light-x2);
+    font-weight: bold;
+    padding: 1.5rem 1rem;
+    font-size: 13px;
+    border-radius: 1rem;
+    display: none;
+    box-shadow: $shadow-medium;
+  
+
+    &[data-show] {
+        display: block;
+    }
+
+    #arrow,
+    #arrow::before {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: inherit;
+    }
+
+    #arrow {
+        visibility: hidden;
+    }
+
+    #arrow::before {
+        visibility: visible;
+        content: "";
+        transform: rotate(45deg);
+    }
+
+    &[data-popper-placement^="top"] > #arrow {
+        bottom: -4px;
+
+        &::before {
+            border-bottom: 1px solid var(--color-paper-light);
+            border-right: 1px solid var(--color-paper-light);
+        }
+    }
+    &[data-popper-placement^="bottom"] > #arrow {
+        top: -4px;
+        &::before {
+            border-top: 1px solid var(--color-paper-light);
+            border-left: 1px solid var(--color-paper-light);
+        }
+    }
+
+    &__section {
+        &__heading {
+            color: var(--color-neutral);
+            padding: 0 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+
+            &.divider {
+                padding-bottom: 1.5rem;
+                border-bottom: 1px solid var(--color-paper-light-x2);
+            }
+        }
+
+        &__list {
+          list-style: none;
+          width: 100%;
+
+          &__item {
+            &.divider {
+                padding-bottom: 1rem;
+                margin-bottom: 1rem;
+                border-bottom: 1px solid var(--color-paper-light-x2);
+            }
+
+          }
+        }
+    }
+
+    &__controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        padding-bottom: 0.6rem;
+        border-top: 1px solid var(--color-paper-light);
+        & .btn-pill {
+            margin-right: 0;
+        }
+    }
+}
+
+.popper-menu-button {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-family: $font-primary;
+    color: var(--color-ink);
+    padding: .75rem 1.5rem;
+    width: 100%;
+    border-radius: 1rem;
+    font-weight: 700;
+    text-align: start;
+    &:hover {
+        background-color: var(--color-paper-light-x2);
+    }
+
+    &.active {
+        color: $color-primary;
+    }
+}

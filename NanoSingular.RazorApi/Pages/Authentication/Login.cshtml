@@ -1,0 +1,79 @@
+﻿@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<!-- Login -->
+<div class="full-view">
+    <div class="full-view__splash">
+        <img src="/assets/img/logo-green.png" alt="Logo" />
+    </div>
+    <div class="full-view__content">
+        <div class="full-view__content__intro">
+            <div class="full-view__content__intro__brand">
+                <img src="/assets/img/logo-green.png" alt="Logo" />
+            </div>
+            <div class="full-view__content__intro__title">
+                Sign In
+            </div>
+        </div>
+
+
+        <div class="full-view__content__form-area">
+
+            <!-- Login Panel -->
+            <form class="login" id="login-form" method="post">
+
+                <!-- Username / Password -->
+                <div class="login__credentials">
+                    <input asp-for="Input.Email" class="paper-input" autocomplete="username" aria-required="true" placeholder="name@example.com" id="username"/>
+                    <input asp-for="Input.Password" class="paper-input" type="password" placeholder="Password" id="password">
+                </div>
+
+                <!-- Submit -->
+                <div class="login__submit">
+                    <button class="btn" id="login-submit" type="submit">
+                        Submit
+                    </button>
+                </div>
+                <div class="login__info">
+                    <div class="login__info__title">
+                        Welcome
+                    </div>
+                    <div class="login__info__text">
+                        For the demo, specify the tenant with the dropdown. ASP Nano can resolve tenants by subdomain in real deployments. Click the Admin Credentials to quickly populate fields.
+                    </div>
+                </div>
+                <div class="login__demo-controls">
+                    <button class="btn outline" type="button" id="credentials">
+                        Admin Credentials
+                    </button>
+                    <!-- Field Group -->
+                    <div class="field-group">
+                        <div class="field-group__title">
+                            Tenant
+                        </div>
+                        <div class="field-group__input-area">
+                            <select id="tenant">
+                                <option value="root">Root</option>
+                                <option value="beta">Beta</option>
+                                <option value="beta">Gamma</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+@section Scripts {
+    <script src="~/assets/js/pages/auth/login.js" asp-append-version="true"></script>
+}

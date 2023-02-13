@@ -1,0 +1,115 @@
+.full-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100%;
+    justify-content: center;
+    @media only screen and (max-width: $bp-medium) {
+        grid-template-columns: 1fr;
+    }
+
+    &__splash {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--color-paper-light);
+        & img {
+            width: 25rem;
+            height: auto;
+        }
+
+        @media only screen and (max-width: $bp-medium) {
+            display: none;
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 6rem;
+        @media only screen and (max-width: $bp-medium) {
+            padding: 3rem;
+        }
+
+        &__intro {
+            width: 100%;
+            margin-bottom: 3rem;
+            max-width: 40rem;
+            &__brand {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 1rem;
+                & img {
+                    width: 7rem;
+                    height: auto;
+                }
+            }
+
+            &__title {
+                text-align: center;
+                font-size: 2rem;
+                font-weight: 700;
+            }
+        }
+
+        &__form-area {
+            max-width: 40rem;
+            width: 100%;
+        }
+    }
+}
+
+//Login Form
+.login {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    &__credentials {
+        display: grid;
+        gap: 1.5rem;
+
+        margin-bottom: 2rem;
+    }
+
+    &__submit {
+        & button {
+            width: 100%;
+        }
+    }
+
+    &__info {
+        margin-top: 3rem;
+        margin-bottom: 2rem;
+        &__title {
+            padding-bottom: .5rem;
+        }
+
+        &__text {
+            font-size: 1.3rem;
+            color: var(--color-neutral);
+        }
+    }
+    &__demo-controls {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+
+        & .field-group {
+            margin-left: 2rem;
+            width: 15rem;
+        }
+        @media only screen and (max-width: $bp-small) {
+            align-items: flex-start;
+            flex-direction: column;
+            & .field-group {
+                margin-left: 0rem;
+                margin-bottom: 2rem;
+                order: -1;
+            }
+        }
+
+      
+      
+    }
+}

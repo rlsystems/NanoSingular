@@ -1,0 +1,218 @@
+﻿@page
+@model NanoSingular.RazorApi.Pages.Users.IndexModel
+
+@{
+    ViewData["Title"] = "User Management";
+
+}
+
+<!-- Controls -->
+<div class="control-block">
+
+    <!-- Search -->
+    <div class="control-block__input-area">
+        <input class="paper-input" id="search-input" type="text" placeholder="Search">
+    </div>
+    @if(User.IsInRole("root")) {
+        <div>ROOT</div>
+    }
+    @if (User.IsInRole("admin"))
+    {
+    <div>admin</div>
+    }
+    @if (User.IsInRole("editor"))
+    {
+    <div>editor</div>
+    }
+    @if (User.IsInRole("basic"))
+    {
+    <div>basic</div>
+    }
+    <!-- Add -->
+    <div class="control-block__button-area">
+        <button class="btn" id="reloadButton">
+            Reload
+        </button>
+        <!-- Add Venue -->
+        <button class="btn" id="addUserButton" @(User.IsInRole("root") || User.IsInRole("admin")  ? "" : "disabled")>
+            Add User
+        </button>
+    </div>
+</div>
+
+
+<!-- Table -->
+<div id="jsGrid"></div>
+
+
+<!-- User Modal -->
+<div class="modal" id="userModal">
+    <form class="modal__content" autocomplete="off" id="userModalContent">
+
+        <!-- Modal Content: Top -->
+        <div class="modal__content__top">
+            <div class="modal__content__top__nav">
+                <div class="modal__content__top__nav__title create-only">
+                    Add New User
+                </div>
+                <div class="modal__content__top__nav__title edit-only">
+                    Edit User
+                </div>
+            </div>
+            <button class="btn btn--small btn--outline btn--transparent close-modal-button" type="button">
+                <svg>
+                    <use xlink:href="/assets/css/sprite.svg#icon-x"></use>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Modal Content: Main -->
+        <div class="modal__content__main">
+
+            <!-- Form Block (no title) -->
+            <div class="form-block">
+                <div class="form-block__fields edit-only" id="activeUserBlock">
+                    <div class="field-group label-horizontal">
+                        <div class="field-group__title">
+                            Is Active
+                        </div>
+                        <div class="field-group__input-area">
+                            <input type="checkbox" class="switchery-switch" checked id="isActive" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-block__fields grid-fields-2">
+                    <!-- Field Group -->
+                    <div class="field-group">
+                        <div class="field-group__title">
+                            First Name
+                        </div>
+                        <div class="field-group__input-area">
+                            <input type="text" placeholder="First Name" id="firstName">
+                        </div>
+                    </div>
+
+                    <!-- Field Group -->
+                    <div class="field-group">
+                        <div class="field-group__title">
+                            Last Name
+                        </div>
+                        <div class="field-group__input-area">
+                            <input type="text" placeholder="Last Name" id="lastName">
+                        </div>
+                    </div>
+
+                    <!-- Field Group -->
+                    <div class="field-group">
+                        <div class="field-group__title">
+                            Email
+                        </div>
+                        <div class="field-group__input-area">
+                            <input type="text" placeholder="user@email.com" id="email">
+                        </div>
+                    </div>
+
+                    <!-- Field Group -->
+                    <div class="field-group">
+                        <div class="field-group__title">
+                            Phone Number
+                        </div>
+                        <div class="field-group__input-area">
+                            <input type="text" placeholder="Phone Number" id="phoneNumber">
+                        </div>
+                    </div>
+
+                    <!-- Field Group -->
+                    <div class="field-group create-only">
+                        <div class="field-group__title">
+                            Password
+                        </div>
+                        <div class="field-group__input-area">
+                            <input type="text" value="Password123!" placeholder="Password" id="password">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- Form Block -->
+            <div class="form-block">
+                <div class="form-block__title">
+                    Role Assignment
+                </div>
+
+                <div class="form-block__fields flex-fields">
+
+                    <div class="radio-group">
+                        <input type="radio" class="radio-group__input" id="adminRole" name="userRole" value="admin" />
+                        <label for="adminRole" class="radio-group__label">
+                            <span class="radio-group__label__button"></span>
+                            <div class="radio-group__label__text">
+                                <div class="radio-group__label__text__title">
+                                    Admin
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="radio-group">
+                        <input type="radio" class="radio-group__input" id="editorRole" name="userRole" value="editor" />
+                        <label for="editorRole" class="radio-group__label">
+                            <span class="radio-group__label__button"></span>
+                            <div class="radio-group__label__text">
+                                <div class="radio-group__label__text__title">
+                                    Editor
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="radio-group">
+                        <input type="radio" class="radio-group__input" id="basicRole" name="userRole" value="basic" />
+                        <label for="basicRole" class="radio-group__label">
+                            <span class="radio-group__label__button"></span>
+                            <div class="radio-group__label__text">
+                                <div class="radio-group__label__text__title">
+                                    Basic
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="modal__content__bottom">
+            <div class="modal__content__bottom__left">
+                <button class="btn edit-only" type="submit" id="deleteUserSubmit">
+                    Delete
+                </button>
+            </div>
+            <div class="modal__content__bottom__right">
+                <button type="button" class="btn btn--outline close-modal-button">
+                    Cancel
+                </button>
+                <button class="btn edit-only" type="submit" id="editUserSubmit">
+                    Edit User
+                </button>
+                <button class="btn create-only" type="submit" id="addUserSubmit">
+                    Add User
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        //need to get userID and pass to js
+        var currentUserId = '@Model.CurrentUserId';
+    </script>
+
+
+    <script src="/assets/js/pages/users/users.js" asp-append-version="true"></script>
+}

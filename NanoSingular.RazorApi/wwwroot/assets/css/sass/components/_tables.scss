@@ -1,0 +1,100 @@
+table {
+  width: 100%;
+  border-spacing: 0 1rem;
+
+  thead {
+    background-color: var(--color-paper-light-x2);
+    th {
+      text-align: start;
+      padding: 1rem 2rem;
+      overflow: hidden;
+      font-size: 1.3rem;
+      &:first-child {
+        border-top-left-radius: 1rem;
+        border-bottom-left-radius: 1rem;
+        padding-left: 2rem;
+      }
+      &:last-child {
+        border-top-right-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+        padding-right: 3rem;
+        text-align: end;
+      }
+    }
+  }
+  tbody {
+    font-size: 1.5rem;
+    tr {
+      background-color: var(--color-paper-light);
+      color: var(--color-neutral);
+
+      td {
+        padding: 2rem;
+        overflow: hidden;
+        border-left: 1px solid var(--color-paper-light-x2);
+
+        &:first-child {
+          border-top-left-radius: 1rem;
+          border-bottom-left-radius: 1rem;
+          border-left: none;
+        }
+        &:last-child {
+          border-top-right-radius: 1rem;
+          border-bottom-right-radius: 1rem;
+          border-left: none;
+          text-align: right;
+        }
+      }
+    }
+  }
+}
+
+//jsgrid -------------------------------------------------------
+.jsgrid-grid-header{
+  overflow: auto;
+  background-color: var(--color-paper-light-x2);
+  border-radius: 1rem;
+  font-size: 1.3rem;
+}
+.jsgrid-grid-body {
+  overflow: auto;
+}
+
+
+
+.jsgrid-table {
+  border-collapse: separate;
+  border-spacing: 0 1rem;
+
+}
+
+.jsgrid-selected-row {
+  background-color: var(--color-paper-light-x1);
+}
+
+.jsgrid-cell {
+  padding: 1rem 2rem;
+}
+.jsgrid-header-cell {
+  text-align: start;
+  padding: 0 2rem;
+  
+  &:last-child {
+    text-align: end;
+    padding-right: 4rem;
+  }
+}
+
+.row-label {
+  height: min-content;
+  width: max-content;
+  padding: 1rem 2rem;
+  // border-radius: 2rem;
+  // border: 2px solid var(--color-paper-light-x2);
+  // font-family: $font-primary;
+  // color: var(--color-neutral);
+  // font-weight: 600;
+  // cursor: pointer;
+  // background-color: transparent;
+  // transition: all 0.1s;
+}

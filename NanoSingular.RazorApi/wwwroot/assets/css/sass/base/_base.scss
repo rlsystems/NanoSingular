@@ -1,0 +1,86 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%; //10px = 1 rem
+  height: 100%;
+}
+
+main {
+  height: 100%;
+}
+
+body {
+
+  //constant
+  --color-primary: #0095ff;
+  --color-primary-light: #3eafff;
+  --color-primary-dark: #12507c;
+
+  --color-green:#00c95a;
+
+
+  --color-grey: #e2e2e2;
+  --color-grey-dark: #949494;
+
+  //variable
+  --color-ink: #fff;
+  --color-paper: rgb(23, 28, 36);
+  --color-paper-input: rgb(28, 36, 45);
+
+  --color-paper-light: rgb(34, 43, 54);
+  --color-paper-light-x1: rgb(41, 51, 64);
+  --color-paper-light-x2: rgb(48, 62, 78);
+  --color-paper-light-x3: rgb(70, 88, 109);
+
+  --color-neutral: rgb(140, 163, 186);
+
+  font-family: $font-primary;
+  color: var(--color-ink);
+  background-color: var(--color-paper);
+  font-weight: 400;
+  font-size: 1.6rem;
+  height: 100%;
+  position: relative;
+
+  &.light {
+    --color-ink: black;
+    --color-paper: rgb(235, 235, 235);
+    --color-paper-input: rgb(245, 245, 245);
+
+    --color-paper-light: white;
+    --color-paper-light-x1: rgb(248, 248, 248);
+    --color-paper-light-x2: rgb(235, 235, 235);
+    --color-paper-light-x3: rgb(199, 207, 216);
+
+    --color-neutral: rgb(74, 91, 112);
+  }
+}
+
+input {
+  height: 5rem;
+  background-color: var(--color-paper-input);
+  border: 2px solid var(--color-paper-light-x3);
+  border-radius: 1rem;
+  color: var(--color-ink);
+  padding: 0rem 1.5rem;
+  font-family: $font-primary;
+  width: 100%;
+  max-width: 40rem;
+  &:focus {
+    outline: none;
+    border: 2px solid var(--color-neutral);
+  }
+
+  &::placeholder {
+    color: var(--color-neutral);
+    opacity: 0.5;
+  }
+
+}

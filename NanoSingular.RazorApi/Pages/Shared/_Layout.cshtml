@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,300,400,700,900" rel="stylesheet" />
+    <link rel="stylesheet" href="~/vendor/select2/select2.min.css">
+    <link rel="stylesheet" href="~/vendor/switchery/switchery.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+    <link rel="stylesheet" href="~/assets/css/style.css" />
+    <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png" />
+    <title>@ViewData["Title"] - NanoSingular.RazorApi</title>
+</head>
+<body>
+
+    <!-- Side Nav (fixed) -->
+    <div class="side-nav">
+        <div class="side-nav__brand">
+            <img src="/assets/img/logo-green.png" alt="Logo" />
+        </div>
+        <div class="side-nav__links">
+            <a class="side-nav__links__link" asp-page="/Venues/Index">
+                <svg>
+                    <use xlink:href="/assets/css/sprite.svg#icon-list-bullet"></use>
+                </svg>
+            </a>
+            <a class="side-nav__links__link" asp-page="/Users/Index">
+                <svg>
+                    <use xlink:href="/assets/css/sprite.svg#icon-multiple"></use>
+                </svg>
+            </a>
+
+
+            <a class="side-nav__links__link" asp-page="/Index">
+                <svg>
+                    <use xlink:href="/assets/css/sprite.svg#icon-multiple"></use>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+
+
+
+    <!-- Page Content-->
+    <div class="page-content">
+
+        <!-- Header (Top) -->
+        <header class="header">
+            <div class="header__title-area">
+                @ViewData["Title"]
+            </div>
+            <div class="header__tools-area">
+                <button class="theme-toggle" id="theme-toggle">
+                    <svg>
+                        <use xlink:href="/assets/css/sprite.svg#icon-sunny"></use>
+                    </svg>
+                </button>
+                <button class="btn-secondary avatar-button" id="profile-button">
+                    Hello @User.Identity?.Name!
+                    <img src="/assets/img/sample-content/profile.jpg" />
+                </button>
+                <!-- Profile Tooltip -->
+                <div class="popper-tooltip" id="profile-tooltip" role="tooltip">
+                    <div class="popper-tooltip__section">
+                        <div class="popper-tooltip__section__heading divider">
+                            <div class="avatar avatar--small">
+                                <div class="avatar__image-area">
+                                    <img src="/assets/img/sample-content/profile.jpg" />
+                                </div>
+                                <div class="avatar__title-group">
+                                    <div class="avatar__title-group__title">
+                                        Ryan Lewis
+                                    </div>
+                                    <div class="avatar__title-group__sub">
+                                        Admin level user
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="popper-tooltip__section__list">
+                            <li class="popper-tooltip__section__list__item">
+                                <button class="popper-menu-button profile-option" value="profile">
+                                    Profile
+                                </button>
+                            </li>
+                            <li class="popper-tooltip__section__list__item divider">
+                                <button class="popper-menu-button profile-option" value="preferences">
+                                    Preferences
+                                </button>
+                            </li>
+                            <li class="popper-tooltip__section__list__item">
+                                <form asp-area="Identity" asp-page="/Account/Logout" method="post">
+                                    <button type="submit" class="popper-menu-button profile-option">Log out</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+
+            @RenderBody()
+
+        </main>
+
+    </div>
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="~/vendor/jquery/jQuery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <script src="~/vendor/switchery/switchery.min.js"></script>
+
+    <script src="~/vendor/select2/select2.min.js"></script>
+    <script src="~/vendor/popper/popper.min.js"></script>
+    <script src="~/assets/js/app-global.js" asp-append-version="true"></script>
+    <script src="~/assets/js/global/modal.js" asp-append-version="true"></script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

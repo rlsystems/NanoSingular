@@ -1,0 +1,193 @@
+﻿@page
+@model NanoSingular.RazorApi.Areas.Identity.Pages.Users.IndexModel
+@{
+}
+
+
+<!-- Controls -->
+<div class="control-block">
+
+    <!-- Search -->
+    <div class="control-block__input-area">
+        <input class="paper-input" id="search-input" type="text" placeholder="Search">
+    </div>
+
+    <!-- Add -->
+    <div class="control-block__button-area">
+
+        <!-- Options Button -->
+        <button class="btn transparent svg-vertical" id="options-button">
+            <svg>
+                <use xlink:href="/assets/css/sprite.svg#icon-dots"></use>
+            </svg>
+        </button>
+        <!-- Options Tooltip -->
+        <div class="popper-tooltip" id="options-tooltip" role="tooltip">
+            <div class="popper-tooltip__section">
+                <div class="popper-tooltip__section__heading">
+                    View Options
+                </div>
+                <ul class="popper-tooltip__section__list">
+                    <li class="popper-tooltip__section__list__item">
+                        <button class="popper-menu-button view-mode-option" value="table">
+                            Table
+                        </button>
+                    </li>
+                    <li class="popper-tooltip__section__list__item">
+                        <button class="popper-menu-button view-mode-option" value="grid">
+                            Grid
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Add Venue -->
+        <button class="btn">
+            Add Venue
+        </button>
+    </div>
+</div>
+
+
+<!-- Controls -->
+
+<div class="table-grid" style="display: none;">
+    <div class="information-card">
+
+        <div class="information-card__section divider">
+            <div class="avatar">
+                <div class="avatar__image-area">
+                    <img src="/assets/img/sample-content/delfin-i.jpg" />
+                </div>
+                <div class="avatar__title-group">
+                    <div class="avatar__title-group__title">
+                        Delfin I
+                    </div>
+                    <div class="avatar__title-group__sub">
+                        River Cruise Vessel
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="information-card__section divider">
+
+            <!-- Spec -->
+            <div class="specs-item">
+                <div class="specs-item__icon">
+                    <svg>
+                        <use xlink:href="/assets/css/sprite.svg#icon-compass"></use>
+                    </svg>
+                </div>
+                <div class="specs-item__text">
+                    <div class="specs-item__text__main">
+                        Itineraries - <span>6</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spec -->
+            <div class="specs-item">
+                <div class="specs-item__icon">
+                    <svg>
+                        <use xlink:href="/assets/css/sprite.svg#icon-maximize"></use>
+                    </svg>
+                </div>
+                <div class="specs-item__text">
+                    <div class="specs-item__text__main">
+                        Room Types - <span>4</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spec -->
+            <div class="specs-item">
+                <div class="specs-item__icon">
+                    <svg>
+                        <use xlink:href="/assets/css/sprite.svg#icon-discount"></use>
+                    </svg>
+                </div>
+                <div class="specs-item__text">
+                    <div class="specs-item__text__main">
+                        Promotions - <span>3</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="information-card__bottom">
+            <div class="information-card__bottom__left">
+                <button class="btn-outline single-icon">
+                    <svg>
+                        <use xlink:href="/assets/css/sprite.svg#icon-cogwheel"></use>
+                    </svg>
+                </button>
+            </div>
+            <div class="information-card__bottom__right">
+                <button class="btn-outline">
+                    Edit
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Role
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Active
+            </th>
+            <th>
+                Edit
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                Name
+            </td>
+            <td>
+                Role
+            </td>
+            <td>
+                Email
+            </td>
+              <td>
+                Active
+            </td>
+            <td>
+                <button class="btn-outline">
+                    Edit
+                </button>
+            </td>
+        </tr>
+        
+       
+    </tbody>
+
+</table>
+
+
+
+
+
+
+
+
+
+
+
+

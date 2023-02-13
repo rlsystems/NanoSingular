@@ -1,0 +1,151 @@
+
+// Departure / Cabin data
+.information-card {
+    border-radius: 1rem;
+    padding: 1.5rem 2rem;
+    position: relative;
+    background-color: var(--color-paper-light);
+    max-width: 40rem;
+    //box-shadow: $shadow-medium;
+
+    &__section {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+
+        &.divider {
+            border-bottom: 1px solid var(--color-paper-light-x2);
+        }
+
+        &.grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 3rem;
+            row-gap: 1rem;
+        }
+    }
+
+    &__bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &__right {
+            
+        }
+
+
+        &__left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+        }
+    }
+}
+// generic sub components
+.avatar {
+    font-size: 1.4rem;
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    gap: 2rem;
+    align-items: center;
+    position: relative;
+
+    &--small {
+        gap: 1rem;
+
+        & .avatar__image-area img {
+            height: 6rem;
+            width: 6rem;
+        }
+
+        & .avatar__title-group__title {
+            padding-bottom: 0;
+            line-height: 1.8rem;
+        }
+
+        & .avatar__title-group__sub {
+            font-size: 1.1rem;
+        }
+    }
+    &--large {
+        gap: 2rem;
+
+        & .avatar__image-area img {
+            height: 10rem;
+            width: 10rem;
+        }
+
+        & .avatar__title-group__title {
+            font-size: 2.2rem;
+        }
+
+        & .avatar__title-group__sub {
+            font-size: 1.4rem;
+        }
+    }
+
+
+    &__image-area {
+        display: flex;
+        align-items: center;
+        user-select: none;
+
+        & img {
+            height: 8rem;
+            width: 8rem;
+            border-radius: 8rem;
+            object-fit: cover;
+        }
+    }
+
+    &__title-group {
+        &__title {
+            color: var(--color-ink);
+            font-weight: 700;
+
+            &:link {
+                text-decoration: none;
+            }
+        }
+        &__sub {
+            margin-top: .3rem;
+            color: var(--color-neutral);
+        }
+    }
+}
+
+.specs-item {
+    font-size: 1.4rem;
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    color: var(--color-neutral);
+
+    &:not(:last-child) {
+        margin-bottom: 0.5rem;
+    }
+    &__icon {
+        & svg {
+            height: 1.6rem;
+            width: 1.6rem;
+            fill: currentColor;
+            color: currentColor;
+            transform: translateY(1px);
+        }
+        margin-right: 1rem;
+    }
+    &__text {
+        &__main {
+            font-size: 1.4rem;
+            line-height: 2rem;
+        }
+        &__sub {
+            font-size: 1rem;
+            color: var(--color-paper-light);
+        }
+
+        & span {
+            color: var(--color-ink);
+        }
+    }
+}

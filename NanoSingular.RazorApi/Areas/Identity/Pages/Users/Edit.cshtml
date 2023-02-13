@@ -1,0 +1,19 @@
+﻿@page
+@model NanoSingular.RazorApi.Areas.Identity.Pages.Users.EditModel
+@{
+}
+<h1>Edit</h1>
+
+
+
+<ul>
+    <li>First Name: @Model.User.FirstName</li>
+    <li>Last Name: @Model.User.LastName</li>
+    <li>Email: @Model.User.Email</li>
+    <li>Roles: @Model.User.RoleId</li>
+    <li>
+        <a class="btn btn-primary" asp-area="Identity" asp-page="/Users/Index">Back To List</a>
+
+    </li>
+</ul>
+

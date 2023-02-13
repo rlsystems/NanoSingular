@@ -1,0 +1,29 @@
+﻿@page
+@model NanoSingular.RazorApi.Areas.Identity.Pages.UsersAjax.IndexModel
+@{
+}
+<h1>User Management AJAX </h1>
+<div id="mainTable">
+</div>
+
+<script>
+    //use axios
+    document.addEventListener("DOMContentLoaded", function (event) {
+        getItems();
+    });
+
+    const uri = '/api/identity';
+
+    function getItems() {
+        fetch(uri)
+            .then(response => response.json())
+            .then(response => console.log(response.data))
+            .catch(error => console.error('Unable to get items.', error));
+    }
+
+
+
+
+
+
+</script>

@@ -1,0 +1,17 @@
+{
+  "name": "mvc-ui",
+  "version": "1.0.0",
+  "description": "admin ui ",
+  "main": "index.js",
+  "scripts": {
+    "watch:sass": "node-sass sass/main.scss style.css -w"
+  },
+  "author": "Ryan",
+  "license": "ISC",
+  "devDependencies": {
+    "node-sass": "^8.0.0"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.6"
+  }
+}
