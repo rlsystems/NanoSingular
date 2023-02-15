@@ -1,20 +1,20 @@
-﻿using NanoSingular.Application.Common;
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using NanoSingular.Application.Common;
 
 namespace NanoSingular.RazorApi.Middleware
 {
     public class UserResolver
     {
         private readonly RequestDelegate _next;
+
         public UserResolver(RequestDelegate next)
         {
             _next = next;
         }
 
-        // Get User Id from incoming requests 
-        public async Task InvokeAsync(HttpContext context, ICurrentTenantUserService newCurrentTenantService, IWebHostEnvironment env)
+        // Get User Id from incoming requests
+        public async Task InvokeAsync(HttpContext context, ICurrentTenantUserService newCurrentTenantService)
         {
-
             var tenantFromAuth = context.User?.FindFirstValue("tenant");
             if (!string.IsNullOrEmpty(tenantFromAuth))
             {
@@ -35,6 +35,5 @@ namespace NanoSingular.RazorApi.Middleware
 
             await _next(context);
         }
-
     }
 }

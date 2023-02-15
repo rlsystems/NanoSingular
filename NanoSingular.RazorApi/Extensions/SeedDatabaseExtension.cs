@@ -12,7 +12,7 @@ namespace NanoSingular.RazorApi.Extensions
             try
             {
                 var context = services.GetRequiredService<ApplicationDbContext>();
-
+                context.Database.EnsureCreated();
                 DbInitializer.SeedTenantAdminAndRoles(context); // seed database with root tenant, root admin, and default roles
             }
             catch (Exception ex)

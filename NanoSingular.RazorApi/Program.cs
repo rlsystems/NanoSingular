@@ -1,76 +1,70 @@
-using FluentValidation.AspNetCore;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
-using NanoSingular.Application.Utility;
-using NanoSingular.Infrastructure.Auth;
 using NanoSingular.Infrastructure.Identity;
 using NanoSingular.Infrastructure.Persistence.Contexts;
 using NanoSingular.RazorApi.Extensions;
-using NanoSingular.RazorApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
+services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+services.AddDatabaseDeveloperPageExceptionFilter();
 
-
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(o =>
+services.AddIdentity<ApplicationUser, IdentityRole>(o =>
 {
-    o.SignIn.RequireConfirmedAccount = false; // Password Requirements
+    o.SignIn.RequireConfirmedAccount = true; // Password Requirements
     o.Password.RequiredLength = 6;
     o.Password.RequireDigit = false;
     o.Password.RequireLowercase = false;
     o.Password.RequireUppercase = false;
     o.Password.RequireNonAlphanumeric = false;
 }
-).AddEntityFrameworkStores<ApplicationDbContext>()
- .AddDefaultTokenProviders();
+).AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddAuthentication();
-builder.Services.ConfigureApplicationCookie(options =>
+services.AddAuthentication();
+services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Authentication/Login"; // specify which page is the login page
 });
-builder.Services.AddAuthorization(options =>
+
+services.AddAuthorization(options =>
 {
     options.FallbackPolicy = new AuthorizationPolicyBuilder() // require auth on all pages/endpoints by default
         .RequireAuthenticatedUser()
         .Build();
 });
 
-builder.Services.AddRazorPages();
+services.AddRazorPages();
 
-builder.Services.ConfigureApplicationServices(builder.Configuration); // Register Services
+services.ConfigureApplicationServices(builder.Configuration); // Register Services
 
-
-builder.Services.AddControllers(opt =>
+services.AddControllers(opt =>
 {
-    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    var policyBuilder = new AuthorizationPolicyBuilder();
+
+    var policy = policyBuilder
+                    .RequireAuthenticatedUser()
+                    .Build();
+
     opt.Filters.Add(new AuthorizeFilter(policy)); // makes so that all the controllers require authorization by default
-
-}).AddFluentValidation(fv =>
-{
-    fv.ImplicitlyValidateChildProperties = true;
-    fv.ImplicitlyValidateRootCollectionElements = true;
-
-    fv.RegisterValidatorsFromAssemblyContaining<NanoSingular.Application.Utility.IRequestValidator>(); // auto registers all fluent validation classes, in all assemblies with an IRequestValidator class
-    fv.RegisterValidatorsFromAssemblyContaining<NanoSingular.Infrastructure.Utility.IRequestValidator>();
 });
 
-
+services.AddValidatorsFromAssemblyContaining<NanoSingular.Application.Utility.IRequestValidator>();
+services.AddValidatorsFromAssemblyContaining<NanoSingular.Infrastructure.Utility.IRequestValidator>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
 }
 else
@@ -80,6 +74,8 @@ else
     app.UseHsts();
 }
 
+app.SeedDatabase(); // run the DbInitializer (seed non-static data - root tenant/admin, roles)
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -87,9 +83,14 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<UserResolver>();
+//app.UseMiddleware<UserResolver>();
+
+app.Use(async (context, next) =>
+{
+    await next(context);
+});
+
 app.MapRazorPages();
 app.MapControllers();
-app.SeedDatabase(); // run the DbInitializer (seed non-static data - root tenant/admin, roles)
 
 app.Run();
