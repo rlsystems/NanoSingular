@@ -2,28 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-using NanoSingular.Infrastructure.Identity;
 using System.Net.Mail;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using NanoSingular.Infrastructure.Identity;
 
 namespace NanoSingular.RazorApi.Pages.Authentication
 {
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> _signInManager; //this was 
+        private readonly SignInManager<ApplicationUser> _signInManager; //this was
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
@@ -51,6 +45,9 @@ namespace NanoSingular.RazorApi.Pages.Authentication
             [Required]
             [DataType(DataType.Password)]
             public string Password { get; set; }
+
+            [Required]
+            public string Tenant { get; set; }
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
@@ -81,53 +78,73 @@ namespace NanoSingular.RazorApi.Pages.Authentication
 
             if (ModelState.IsValid)
             {
+                ApplicationUser user = null;
                 var userName = Input.Email;
                 if (IsValidEmail(Input.Email)) // allow login with email too
                 {
-                    var user = await _userManager.FindByEmailAsync(Input.Email);
-                    if (user != null)
+                    user = await _userManager.FindByEmailAsync(Input.Email);
+
+                    if (user == null)
                     {
-                        userName = user.UserName;
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        return Page();
                     }
 
-
+                    userName = user.UserName;
                 }
 
                 //https://blog.dangl.me/archive/adding-custom-claims-when-logging-in-with-aspnet-core-identity-cookie/
-                //var passwordIsCorrect = await _userManager.CheckPasswordAsync(userName, Input.Password);
-                //if (passwordIsCorrect)
-                //{
-                //    var customClaims = new[]
-                //    {
-                //    new Claim("logged_in_day", DateTime.UtcNow.DayOfWeek.ToString())
-                //};
-                //    await _customClaimsCookieSignInHelper.SignInUserAsync(user, model.RememberMe, customClaims);
-                //    _logger.LogInformation(1, "User logged in.");
-                //    return NoContent();
-                //}
+                var passwordIsCorrect = await _userManager.CheckPasswordAsync(user, Input.Password);
 
+                if (!passwordIsCorrect)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return Page();
+                }
 
+                // adding custom tenant claim, this can potentially be moved to CustomClaimsCookieSignInHelper
+                // as mentioned in the blog
+                var customClaims = new[]
+                {
+                    new Claim("logged_in_day", DateTime.UtcNow.DayOfWeek.ToString()),
+                    new Claim("tenant", Input.Tenant)
+                };
 
+                var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(user);
+                if (claimsPrincipal.Identity is ClaimsIdentity claimsIdentity)
+                {
+                    claimsIdentity.AddClaims(customClaims);
+                }
+
+                // see SignInAsync call with claims after the result.Succeeded condition
+                // END adding additional claims
+
+                // we don't really need this line, but we need to check the result, not sure if there is any alternative way of doing that
                 var result = await _signInManager.PasswordSignInAsync(userName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
                 if (result.Succeeded)
                 {
+                    // this will set the context with additional claims
+                    await _signInManager.Context.SignInAsync(IdentityConstants.ApplicationScheme, claimsPrincipal);
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
+
                 if (result.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 }
+
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
-                }
+
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+
+                return Page();
             }
 
             // If we got this far, something failed, redisplay form

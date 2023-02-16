@@ -19,7 +19,7 @@ services.AddDatabaseDeveloperPageExceptionFilter();
 
 services.AddIdentity<ApplicationUser, IdentityRole>(o =>
 {
-    o.SignIn.RequireConfirmedAccount = true; // Password Requirements
+    // Password Requirements
     o.Password.RequiredLength = 6;
     o.Password.RequireDigit = false;
     o.Password.RequireLowercase = false;
@@ -28,10 +28,27 @@ services.AddIdentity<ApplicationUser, IdentityRole>(o =>
 }
 ).AddEntityFrameworkStores<ApplicationDbContext>();
 
-services.AddAuthentication();
+services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+});
+
 services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Authentication/Login"; // specify which page is the login page
+
+    // there used to be a mechnism in .net core called AutomaticAuthentication which
+    // when set to true will ensure that request is authenticated, otherwise will only
+    // authenticate if you have Authorize tag on the action/controller method.
+
+    // This property was removed earlier, and although the recommended way
+    // of acheiving the same is to use DefaultAuthenticationScheme and/or DefaultChallengeScheme
+
+    // However, the above option wasn't working so as a work around
+    // setting the property below fixes the issue.
+
+    // I have opted-in for an alternative solution
+    //options.Events = new CookieAuthenticationEvents();
 });
 
 services.AddAuthorization(options =>
@@ -65,6 +82,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+
+    // this needs to be the first middleware after the UseDeveloperExceptionPage
+    // so that any database changes would be applied automatically.
+    // if this runs for the first time, it will seed the data as well as configured in
+    // the OnModelCreating
     app.UseMigrationsEndPoint();
 }
 else
@@ -74,23 +96,31 @@ else
     app.UseHsts();
 }
 
-app.SeedDatabase(); // run the DbInitializer (seed non-static data - root tenant/admin, roles)
-
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthentication();
-app.UseAuthorization();
-//app.UseMiddleware<UserResolver>();
 
-app.Use(async (context, next) =>
-{
-    await next(context);
-});
+app.UseAuthorization();
 
 app.MapRazorPages();
+
 app.MapControllers();
+
+// Ensure database is created and seeded
+// if you want to run the database migrations if any
+// new ones exist, every time the application starts then uncomment
+// the following lines. Otherwise, call the /ApplyDatabaseMigrations
+// and the app.UseMigrationsEndPoint() will take care of it above
+
+//using (var scope = app.Services.CreateScope())
+//{
+//    var provider = scope.ServiceProvider;
+//    var context = provider.GetRequiredService<ApplicationDbContext>();
+//    await context.Database.MigrateAsync();
+//}
 
 app.Run();
