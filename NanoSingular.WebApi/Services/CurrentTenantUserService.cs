@@ -1,7 +1,5 @@
-﻿using NanoSingular.Application.Common;
-using NanoSingular.Infrastructure.Persistence.Contexts;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using NanoSingular.Application.Common;
 
 // This is a scoped service that does not persist data, it fits better in the WebApi project vs the Infrastructure project
 // --This class uses a seperate DB Context to avoid a circular logic error when it looks up the tenant
@@ -17,17 +15,41 @@ namespace NanoSingular.WebApi.Services
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<bool> SetTenantUser(string tenant)
-        {
-            //var tenantInfo = await _tenantDbContext.Tenants.Where(x => x.Id == tenant && x.IsActive == true).FirstOrDefaultAsync(); // check if tenant exists
 
-            TenantId = tenant;
-            UserId = _httpContextAccessor?.HttpContext?.User?.FindFirstValue("uid"); // will be null on login
-            return true;
+        public string? UserId => GetUser();
+
+        // the custom tenant claim will be added at sign in
+        public string? TenantId => GetTenant();
+
+        private string? GetUser()
+        {
+            var user = _httpContextAccessor?.HttpContext?.User;
+
+            return user?.FindFirstValue("uid");
         }
 
+        private string? GetTenant()
+        {
+            var context = _httpContextAccessor?.HttpContext;
 
-        public string? UserId { get; set; }
-        public string? TenantId { get; set; }
+            if (context == null)
+            {
+                return null;
+            }
+
+            var tenantFromAuth = context.User.FindFirstValue("tenant");
+
+            // if we have a tenant in the claim return it
+            if (!string.IsNullOrEmpty(tenantFromAuth))
+            {
+                return tenantFromAuth;
+            }
+
+            // try to get the claim from the header
+            context.Request.Headers.TryGetValue("tenant", out var tenantFromHeader); // Tenant Id from incoming request header
+
+            //return if in the header otherwise default to root
+            return string.IsNullOrEmpty(tenantFromHeader) ? "root" : tenantFromHeader; // Fallback (Needed to load the react client initially)
+        }
     }
 }

@@ -1,17 +1,12 @@
-﻿using NanoSingular.Domain.Entities;
+﻿using Microsoft.AspNetCore.Identity;
 using NanoSingular.Infrastructure.Identity;
-using NanoSingular.Infrastructure.Persistence.Contexts;
-using Microsoft.AspNetCore.Identity;
-
 
 namespace NanoSingular.Infrastructure.Persistence.Initializer
 {
     public static class DbInitializer
     {
-        public static void SeedTenantAdminAndRoles(ApplicationDbContext context)
+        public static ApplicationUser SeedUsers()
         {
-            ArgumentNullException.ThrowIfNull(context, nameof(context));
-
             //User
             var user = new ApplicationUser
             {
@@ -31,26 +26,25 @@ namespace NanoSingular.Infrastructure.Persistence.Initializer
             };
 
             var password = new PasswordHasher<ApplicationUser>();
-            var hashed = password.HashPassword(user, "Password123!");
-            user.PasswordHash = hashed;
+            user.PasswordHash = password.HashPassword(user, "Password123!");
 
-            context.Users.Add(user);
+            return user;
+        }
 
-            //Roles    
-            var roles = new List<IdentityRole>();
-            roles.Add(new IdentityRole() { Id = "1", Name = "root", ConcurrencyStamp = Guid.NewGuid().ToString("D"), NormalizedName = "ROOT" });
-            roles.Add(new IdentityRole() { Id = "2", Name = "admin", ConcurrencyStamp = Guid.NewGuid().ToString("D"), NormalizedName = "ADMIN" });
-            roles.Add(new IdentityRole() { Id = "3", Name = "editor", ConcurrencyStamp = Guid.NewGuid().ToString("D"), NormalizedName = "EDITOR" });
-            roles.Add(new IdentityRole() { Id = "4", Name = "basic", ConcurrencyStamp = Guid.NewGuid().ToString("D"), NormalizedName = "BASIC" });
-            context.Roles.AddRange(roles);
+        public static List<IdentityRole> SeedRoles()
+        {
+            return new List<IdentityRole>
+            {
+                new IdentityRole() { Id = "1", Name = "root", ConcurrencyStamp = Guid.NewGuid().ToString("D"), NormalizedName = "ROOT" },
+                new IdentityRole() { Id = "2", Name = "admin", ConcurrencyStamp = Guid.NewGuid().ToString("D"), NormalizedName = "ADMIN" },
+                new IdentityRole() { Id = "3", Name = "editor", ConcurrencyStamp = Guid.NewGuid().ToString("D"), NormalizedName = "EDITOR" },
+                new IdentityRole() { Id = "4", Name = "basic", ConcurrencyStamp = Guid.NewGuid().ToString("D"), NormalizedName = "BASIC" }
+            };
+        }
 
-
-            //User Roles
-            var rootAdmin = new IdentityUserRole<string>() { RoleId = "1", UserId = "55555555-5555-5555-5555-555555555555" };
-            context.UserRoles.Add(rootAdmin);
-
-
-            context.SaveChanges();
+        public static IdentityUserRole<string> SeedUserRoles()
+        {
+            return new IdentityUserRole<string>() { RoleId = "1", UserId = "55555555-5555-5555-5555-555555555555" };
         }
     }
 }

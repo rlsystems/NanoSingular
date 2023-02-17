@@ -1,76 +1,92 @@
-using FluentValidation.AspNetCore;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
-using NanoSingular.Application.Utility;
-using NanoSingular.Infrastructure.Auth;
 using NanoSingular.Infrastructure.Identity;
 using NanoSingular.Infrastructure.Persistence.Contexts;
 using NanoSingular.RazorApi.Extensions;
-using NanoSingular.RazorApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
+services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+services.AddDatabaseDeveloperPageExceptionFilter();
 
-
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(o =>
+services.AddIdentity<ApplicationUser, IdentityRole>(o =>
 {
-    o.SignIn.RequireConfirmedAccount = false; // Password Requirements
+    // Password Requirements
     o.Password.RequiredLength = 6;
     o.Password.RequireDigit = false;
     o.Password.RequireLowercase = false;
     o.Password.RequireUppercase = false;
     o.Password.RequireNonAlphanumeric = false;
 }
-).AddEntityFrameworkStores<ApplicationDbContext>()
- .AddDefaultTokenProviders();
+).AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddAuthentication();
-builder.Services.ConfigureApplicationCookie(options =>
+services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+});
+
+services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Authentication/Login"; // specify which page is the login page
+
+    // there used to be a mechnism in .net core called AutomaticAuthentication which
+    // when set to true will ensure that request is authenticated, otherwise will only
+    // authenticate if you have Authorize tag on the action/controller method.
+
+    // This property was removed earlier, and although the recommended way
+    // of acheiving the same is to use DefaultAuthenticationScheme and/or DefaultChallengeScheme
+
+    // However, the above option wasn't working so as a work around
+    // setting the property below fixes the issue.
+
+    // I have opted-in for an alternative solution
+    //options.Events = new CookieAuthenticationEvents();
 });
-builder.Services.AddAuthorization(options =>
+
+services.AddAuthorization(options =>
 {
     options.FallbackPolicy = new AuthorizationPolicyBuilder() // require auth on all pages/endpoints by default
         .RequireAuthenticatedUser()
         .Build();
 });
 
-builder.Services.AddRazorPages();
+services.AddRazorPages();
 
-builder.Services.ConfigureApplicationServices(builder.Configuration); // Register Services
+services.ConfigureApplicationServices(builder.Configuration); // Register Services
 
-
-builder.Services.AddControllers(opt =>
+services.AddControllers(opt =>
 {
-    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    var policyBuilder = new AuthorizationPolicyBuilder();
+
+    var policy = policyBuilder
+                    .RequireAuthenticatedUser()
+                    .Build();
+
     opt.Filters.Add(new AuthorizeFilter(policy)); // makes so that all the controllers require authorization by default
-
-}).AddFluentValidation(fv =>
-{
-    fv.ImplicitlyValidateChildProperties = true;
-    fv.ImplicitlyValidateRootCollectionElements = true;
-
-    fv.RegisterValidatorsFromAssemblyContaining<NanoSingular.Application.Utility.IRequestValidator>(); // auto registers all fluent validation classes, in all assemblies with an IRequestValidator class
-    fv.RegisterValidatorsFromAssemblyContaining<NanoSingular.Infrastructure.Utility.IRequestValidator>();
 });
 
-
+services.AddValidatorsFromAssemblyContaining<NanoSingular.Application.Utility.IRequestValidator>();
+services.AddValidatorsFromAssemblyContaining<NanoSingular.Infrastructure.Utility.IRequestValidator>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
+
+    // this needs to be the first middleware after the UseDeveloperExceptionPage
+    // so that any database changes would be applied automatically.
+    // if this runs for the first time, it will seed the data as well as configured in
+    // the OnModelCreating
     app.UseMigrationsEndPoint();
 }
 else
@@ -81,15 +97,30 @@ else
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthentication();
+
 app.UseAuthorization();
-app.UseMiddleware<UserResolver>();
+
 app.MapRazorPages();
+
 app.MapControllers();
-app.SeedDatabase(); // run the DbInitializer (seed non-static data - root tenant/admin, roles)
+
+// Ensure database is created and seeded
+// if you want to run the database migrations if any
+// new ones exist, every time the application starts then uncomment
+// the following lines. Otherwise, call the /ApplyDatabaseMigrations
+// and the app.UseMigrationsEndPoint() will take care of it above
+
+//using (var scope = app.Services.CreateScope())
+//{
+//    var provider = scope.ServiceProvider;
+//    var context = provider.GetRequiredService<ApplicationDbContext>();
+//    await context.Database.MigrateAsync();
+//}
 
 app.Run();
