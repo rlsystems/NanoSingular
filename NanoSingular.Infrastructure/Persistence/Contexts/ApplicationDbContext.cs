@@ -41,7 +41,10 @@ namespace NanoSingular.Infrastructure.Persistence.Contexts
         {
             _currentTenantUserService = currentTenantUserService;
             CurrentUserId = _currentTenantUserService.UserId;
+
             // CurrentTenantId = _currentTenantUserService.TenantId;
+
+            //CurrentUserId = Guid.NewGuid().ToString(); 
         }
 
 

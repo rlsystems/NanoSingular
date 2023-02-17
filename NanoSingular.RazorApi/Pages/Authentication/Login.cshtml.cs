@@ -92,6 +92,7 @@ namespace NanoSingular.RazorApi.Pages.Authentication
 
 
                 }
+                //add custom claim here
 
                 //https://blog.dangl.me/archive/adding-custom-claims-when-logging-in-with-aspnet-core-identity-cookie/
                 //var passwordIsCorrect = await _userManager.CheckPasswordAsync(userName, Input.Password);
@@ -105,6 +106,7 @@ namespace NanoSingular.RazorApi.Pages.Authentication
                 //    _logger.LogInformation(1, "User logged in.");
                 //    return NoContent();
                 //}
+
 
 
 

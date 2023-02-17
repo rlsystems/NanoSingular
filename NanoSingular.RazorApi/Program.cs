@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -18,7 +19,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(o =>
@@ -33,7 +34,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(o =>
 ).AddEntityFrameworkStores<ApplicationDbContext>()
  .AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Authentication/Login"; // specify which page is the login page
@@ -85,11 +86,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<UserResolver>();
-app.MapRazorPages();
+
 app.MapControllers();
+app.MapRazorPages();
+
 app.SeedDatabase(); // run the DbInitializer (seed non-static data - root tenant/admin, roles)
 
 app.Run();
