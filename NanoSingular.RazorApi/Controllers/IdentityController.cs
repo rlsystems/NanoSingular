@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NanoSingular.Infrastructure.Identity;
 using NanoSingular.Infrastructure.Identity.DTOs;
@@ -10,13 +9,12 @@ namespace NanoSingular.RazorApi.Controllers
     [ApiController]
     public class IdentityController : ControllerBase
     {
-        private readonly IIdentityService _identityService; 
+        private readonly IIdentityService _identityService;
 
         public IdentityController(IIdentityService identityService)
         {
             _identityService = identityService;
         }
-
 
         [HttpGet] // Get User List (admin-level permissions)
         public async Task<IActionResult> GetUsersAsync()
