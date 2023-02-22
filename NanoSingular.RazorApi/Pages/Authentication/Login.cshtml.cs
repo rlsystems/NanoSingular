@@ -21,7 +21,7 @@ namespace NanoSingular.RazorApi.Pages.Authentication
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ILogger<LoginModel> logger, IHttpContextAccessor context)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -68,100 +68,80 @@ namespace NanoSingular.RazorApi.Pages.Authentication
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
-        {
-            returnUrl ??= Url.Content("~/");
-            if (returnUrl == "/")
-            {
-                returnUrl = "~/Venues/Index";
-            }
+        //public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        //{
+        //    returnUrl ??= Url.Content("~/");
+        //    if (returnUrl == "/")
+        //    {
+        //        returnUrl = "~/Venues/Index";
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                ApplicationUser user = null;
-                var userName = Input.Email;
-                if (IsValidEmail(Input.Email)) // allow login with email too
-                {
-                    user = await _userManager.FindByEmailAsync(Input.Email);
+        //    if (ModelState.IsValid)
+        //    {
 
-                    if (user == null)
-                    {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                        return Page();
-                    }
+        //        ApplicationUser user = null;
+        //        var userName = Input.Email;
+        //        if (IsValidEmail(Input.Email)) // allow login with email too
+        //        {
+        //            user = await _userManager.FindByEmailAsync(Input.Email);
 
-                    userName = user.UserName;
-                }
+        //            if (user == null)
+        //            {
+        //                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+        //                return Page();
+        //            }
 
-                //https://blog.dangl.me/archive/adding-custom-claims-when-logging-in-with-aspnet-core-identity-cookie/
-                var passwordIsCorrect = await _userManager.CheckPasswordAsync(user, Input.Password);
+        //            userName = user.UserName;
+        //        }
 
-                if (!passwordIsCorrect)
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
-                }
+        //        //https://blog.dangl.me/archive/adding-custom-claims-when-logging-in-with-aspnet-core-identity-cookie/
+        //        var passwordIsCorrect = await _userManager.CheckPasswordAsync(user, Input.Password);
 
-                // adding custom tenant claim, this can potentially be moved to CustomClaimsCookieSignInHelper
-                // as mentioned in the blog
-                var customClaims = new[]
-                {
-                    new Claim("logged_in_day", DateTime.UtcNow.DayOfWeek.ToString()),
-                    new Claim("tenant", Input.Tenant)
-                };
+        //        if (!passwordIsCorrect)
+        //        {
+        //            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+        //            return Page();
+        //        }
 
-                var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(user);
-                if (claimsPrincipal.Identity is ClaimsIdentity claimsIdentity)
-                {
-                    claimsIdentity.AddClaims(customClaims);
-                }
+        //        // adding custom tenant claim, this can potentially be moved to CustomClaimsCookieSignInHelper
+        //        // as mentioned in the blog
+        //        var customClaims = new[]
+        //        {
+        //            new Claim("logged_in_day", DateTime.UtcNow.DayOfWeek.ToString()),
+        //            new Claim("tenant", Input.Tenant)
+        //        };
 
-                // see SignInAsync call with claims after the result.Succeeded condition
-                // END adding additional claims
+        //        var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(user);
+        //        if (claimsPrincipal.Identity is ClaimsIdentity claimsIdentity)
+        //        {
+        //            claimsIdentity.AddClaims(customClaims);
+        //        }
 
-                // we don't really need this line, but we need to check the result, not sure if there is any alternative way of doing that
-                var result = await _signInManager.PasswordSignInAsync(userName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+        //        // see SignInAsync call with claims after the result.Succeeded condition
+        //        // END adding additional claims
 
-                if (result.Succeeded)
-                {
-                    // this will set the context with additional claims
-                    await _signInManager.Context.SignInAsync(IdentityConstants.ApplicationScheme, claimsPrincipal);
+        //        // we don't really need this line, but we need to check the result, not sure if there is any alternative way of doing that
+        //        await _signInManager.Context.SignInAsync(IdentityConstants.ApplicationScheme, claimsPrincipal);
 
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
-                }
 
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
+        //        return Page();
+        //    }
 
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
+        //    // If we got this far, something failed, redisplay form
+        //    return Page();
+        //}
 
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-
-                return Page();
-            }
-
-            // If we got this far, something failed, redisplay form
-            return Page();
-        }
-
-        public bool IsValidEmail(string emailaddress)
-        {
-            try
-            {
-                MailAddress m = new MailAddress(emailaddress);
-                return true;
-            }
-            catch (FormatException)
-            {
-                return false;
-            }
-        }
+        //public bool IsValidEmail(string emailaddress)
+        //{
+        //    try
+        //    {
+        //        MailAddress m = new MailAddress(emailaddress);
+        //        return true;
+        //    }
+        //    catch (FormatException)
+        //    {
+        //        return false;
+        //    }
+        //}
     }
 }

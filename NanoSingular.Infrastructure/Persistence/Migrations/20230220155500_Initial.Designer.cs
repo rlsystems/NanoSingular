@@ -12,8 +12,8 @@ using NanoSingular.Infrastructure.Persistence.Contexts;
 namespace NanoSingular.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230216005032_Added Seeding")]
-    partial class AddedSeeding
+    [Migration("20230220155500_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,36 +50,6 @@ namespace NanoSingular.Infrastructure.Persistence.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Roles", "Identity");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            ConcurrencyStamp = "754fe3d2-14aa-456b-b71a-20bc9869acb9",
-                            Name = "root",
-                            NormalizedName = "ROOT"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            ConcurrencyStamp = "c15ad436-c380-4adb-ab2d-0e2492bee14d",
-                            Name = "admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "3",
-                            ConcurrencyStamp = "b4f79638-4077-44fa-b9c8-bae6e919226c",
-                            Name = "editor",
-                            NormalizedName = "EDITOR"
-                        },
-                        new
-                        {
-                            Id = "4",
-                            ConcurrencyStamp = "1f920f41-87aa-4289-be0e-84da5b887f6a",
-                            Name = "basic",
-                            NormalizedName = "BASIC"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -167,13 +137,6 @@ namespace NanoSingular.Infrastructure.Persistence.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRoles", "Identity");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "55555555-5555-5555-5555-555555555555",
-                            RoleId = "1"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -193,6 +156,25 @@ namespace NanoSingular.Infrastructure.Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("UserTokens", "Identity");
+                });
+
+            modelBuilder.Entity("NanoSingular.Domain.Entities.Tenant", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tenants");
                 });
 
             modelBuilder.Entity("NanoSingular.Domain.Entities.Venue", b =>
@@ -226,6 +208,9 @@ namespace NanoSingular.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -317,6 +302,9 @@ namespace NanoSingular.Infrastructure.Persistence.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TenantId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -335,32 +323,6 @@ namespace NanoSingular.Infrastructure.Persistence.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("Users", "Identity");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "55555555-5555-5555-5555-555555555555",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "48cf6657-577c-45e3-a528-b782856bd4e2",
-                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DarkModeDefault = true,
-                            Email = "admin@email.com",
-                            EmailConfirmed = true,
-                            FirstName = "Default",
-                            IsActive = true,
-                            IsDeleted = false,
-                            LastName = "Admin",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@EMAIL.COM",
-                            NormalizedUserName = "ADMIN@EMAIL.COM.ROOT",
-                            PageSizeDefault = 10,
-                            PasswordHash = "AQAAAAIAAYagAAAAEHKUiac9f17y86vlGimlB7ITitErzBTVkoazSKya15OlQGFe10lxSEn5N6gcp7xzCg==",
-                            PhoneNumberConfirmed = true,
-                            SecurityStamp = "c3c3b81b-1ccf-4e5c-a0fd-988199e83179",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@email.com.root"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

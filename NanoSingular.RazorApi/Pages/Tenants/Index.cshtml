@@ -1,0 +1,137 @@
+﻿@page
+@model NanoSingular.RazorApi.Pages.Tenants.IndexModel
+
+@{
+    ViewData["Title"] = "Tenant Management";
+}
+
+<!-- Controls -->
+<div class="control-block">
+
+    <!-- Search -->
+    <div class="control-block__input-area">
+        <input class="paper-input" id="search-input" type="text" placeholder="Search">
+    </div>
+
+
+    <!-- Buttons -->
+    <div class="control-block__button-area">
+        <!-- Add -->
+        <button class="btn" id="addTenantButton" @(User.IsInRole("root") || User.IsInRole("admin") ? "" : "disabled")>
+            Add Tenant
+        </button>
+    </div>
+</div>
+
+
+<!-- Table -->
+<div id="jsGrid"></div>
+
+
+<!-- Tenant Modal -->
+<div class="modal" id="tenantModal">
+    <form class="modal__content" autocomplete="off" id="tenantModalContent">
+
+        <!-- Modal Content: Top -->
+        <div class="modal__content__top">
+            <div class="modal__content__top__nav">
+                <div class="modal__content__top__nav__title create-only">
+                    Add New Tenant
+                </div>
+                <div class="modal__content__top__nav__title edit-only">
+                    Edit Tenant
+                </div>
+            </div>
+            <button class="btn btn--small btn--outline btn--transparent close-modal-button" type="button">
+                <svg>
+                    <use xlink:href="/assets/css/sprite.svg#icon-x"></use>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Modal Content: Main -->
+        <div class="modal__content__main">
+
+            <!-- Form Block (no title) -->
+            <div class="form-block">
+                <div class="form-block__fields edit-only" id="activeTenantBlock">
+                    <div class="field-group label-horizontal">
+                        <div class="field-group__title">
+                            Is Active
+                        </div>
+                        <div class="field-group__input-area">
+                            <input type="checkbox" class="switchery-switch" checked id="isActive" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-block__fields grid-fields-2">
+                    <!-- Field Group -->
+                    <div class="field-group create-only">
+                        <div class="field-group__title">
+                            Tenant Key
+                        </div>
+                        <div class="field-group__input-area">
+                            <input type="text" placeholder="Tenant Key" id="tenantKey">
+                        </div>
+                    </div>
+
+                    <!-- Field Group -->
+                    <div class="field-group">
+                        <div class="field-group__title">
+                            Name
+                        </div>
+                        <div class="field-group__input-area">
+                            <input type="text" placeholder="Name" id="tenantName">
+                        </div>
+                    </div>
+
+                    <!-- Field Group -->
+                    <div class="field-group create-only">
+                        <div class="field-group__title">
+                            Email
+                        </div>
+                        <div class="field-group__input-area">
+                            <input type="text" placeholder="user@email.com" id="email">
+                        </div>
+                    </div>
+
+                    <!-- Field Group -->
+                    <div class="field-group create-only">
+                        <div class="field-group__title">
+                            Password
+                        </div>
+                        <div class="field-group__input-area">
+                            <input type="text" value="Password123!" placeholder="Password" id="password">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal Content: Bottom -->
+        <div class="modal__content__bottom">
+            <div class="modal__content__bottom__left">
+                <!-- No Delete (manual) -->
+            </div>
+            <div class="modal__content__bottom__right">
+                <button type="button" class="btn btn--outline close-modal-button">
+                    Cancel
+                </button>
+                <button class="btn edit-only" type="submit" id="editTenantSubmit">
+                    Edit Tenant
+                </button>
+                <button class="btn create-only" type="submit" id="addTenantSubmit">
+                    Add Tenant
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+
+    <script src="/assets/js/pages/tenants/tenants.js" asp-append-version="true"></script>
+}

@@ -4,8 +4,8 @@ namespace NanoSingular.Application.Common
 {
     public interface ICurrentTenantUserService : IScopedService
     {
-        string? UserId { get; }
-
-        string? TenantId { get; }
+        string? TenantId { get; set; }
+        string? UserId { get; set; }
+        public Task<bool> SetTenantUser(string tenant);
     }
 }

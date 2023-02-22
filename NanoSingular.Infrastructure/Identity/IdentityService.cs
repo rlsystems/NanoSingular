@@ -138,7 +138,7 @@ namespace NanoSingular.Infrastructure.Identity
 
             var user = new ApplicationUser
             {
-                UserName = request.Email + "." + NanoHelpers.GenerateHex(4), // must be unique across all tenants
+                UserName = request.Email + "." + _currentTenantUserService.TenantId + "." + NanoHelpers.GenerateHex(4), // must be unique across all tenants
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 PhoneNumber = request.PhoneNumber,
@@ -147,6 +147,8 @@ namespace NanoSingular.Infrastructure.Identity
                 IsActive = true,
                 DarkModeDefault = true,
                 PageSizeDefault = 10,
+                TenantId = _currentTenantUserService.TenantId // manually assign tenantId -- applicationUser class doesnt implement IMustHaveTenant interface
+
             };
 
             var result = await _userManager.CreateAsync(user, request.Password); // create user with password

@@ -3,7 +3,7 @@
 namespace NanoSingular.Domain.Entities
 {
 
-    public abstract class AuditableEntity : BaseEntity, IAuditableEntity, ISoftDelete
+    public abstract class AuditableEntity : TenantBaseEntity, IAuditableEntity, ISoftDelete, IMustHaveTenant
     {
         public Guid CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }

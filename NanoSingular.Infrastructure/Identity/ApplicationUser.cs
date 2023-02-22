@@ -9,6 +9,8 @@ namespace NanoSingular.Infrastructure.Identity
         
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string TenantId { get; set; }
+
         public bool IsActive { get; set; } = true;
         public string ImageUrl { get; set; }
         public int PageSizeDefault { get; set; }

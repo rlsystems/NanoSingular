@@ -3,7 +3,6 @@
 
 @{
     ViewData["Title"] = "User Management";
-
 }
 
 <!-- Controls -->
@@ -13,27 +12,10 @@
     <div class="control-block__input-area">
         <input class="paper-input" id="search-input" type="text" placeholder="Search">
     </div>
-    @if(User.IsInRole("root")) {
-        <div>ROOT</div>
-    }
-    @if (User.IsInRole("admin"))
-    {
-    <div>admin</div>
-    }
-    @if (User.IsInRole("editor"))
-    {
-    <div>editor</div>
-    }
-    @if (User.IsInRole("basic"))
-    {
-    <div>basic</div>
-    }
-    <!-- Add -->
+    
+    <!-- Buttons -->
     <div class="control-block__button-area">
-        <button class="btn" id="reloadButton">
-            Reload
-        </button>
-        <!-- Add Venue -->
+        <!-- Add -->
         <button class="btn" id="addUserButton" @(User.IsInRole("root") || User.IsInRole("admin")  ? "" : "disabled")>
             Add User
         </button>
@@ -45,7 +27,7 @@
 <div id="jsGrid"></div>
 
 
-<!-- User Modal -->
+<!-- Modal -->
 <div class="modal" id="userModal">
     <form class="modal__content" autocomplete="off" id="userModalContent">
 
@@ -69,9 +51,10 @@
         <!-- Modal Content: Main -->
         <div class="modal__content__main">
 
-            <!-- Form Block (no title) -->
+            <!-- Form Block (User Info) -->
             <div class="form-block">
                 <div class="form-block__fields edit-only" id="activeUserBlock">
+                    <!-- Field Group -->
                     <div class="field-group label-horizontal">
                         <div class="field-group__title">
                             Is Active
@@ -136,14 +119,14 @@
             </div>
 
 
-            <!-- Form Block -->
+            <!-- Form Block (Roles) -->
             <div class="form-block">
+
                 <div class="form-block__title">
                     Role Assignment
                 </div>
 
                 <div class="form-block__fields flex-fields">
-
                     <div class="radio-group">
                         <input type="radio" class="radio-group__input" id="adminRole" name="userRole" value="admin" />
                         <label for="adminRole" class="radio-group__label">
@@ -185,6 +168,8 @@
             </div>
 
         </div>
+
+        <!-- Modal Content: Bottom -->
         <div class="modal__content__bottom">
             <div class="modal__content__bottom__left">
                 <button class="btn edit-only" type="submit" id="deleteUserSubmit">
@@ -209,10 +194,7 @@
 
 @section Scripts {
     <script>
-        //need to get userID and pass to js
-        var currentUserId = '@Model.CurrentUserId';
+        var currentUserId = '@Model.CurrentUserId'; // pass userID to js for table row rendering
     </script>
-
-
     <script src="/assets/js/pages/users/users.js" asp-append-version="true"></script>
 }

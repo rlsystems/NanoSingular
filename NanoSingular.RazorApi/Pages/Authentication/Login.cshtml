@@ -2,6 +2,8 @@
 @model LoginModel
 @{
     ViewData["Title"] = "Log in";
+    
+    
 }
 
 <!-- Login -->
@@ -23,7 +25,7 @@
         <div class="full-view__content__form-area">
 
             <!-- Login Panel -->
-            <form class="login" id="login-form" method="post">
+            <form class="login" id="login-form">
 
                 <!-- Username / Password -->
                 <div class="login__credentials">
@@ -33,7 +35,7 @@
 
                 <!-- Submit -->
                 <div class="login__submit">
-                    <button class="btn" id="login-submit" type="submit">
+                    <button class="btn" id="loginSubmit" type="submit">
                         Submit
                     </button>
                 </div>
@@ -58,7 +60,7 @@
                             <select id="tenant" asp-for="Input.Tenant">
                                 <option value="root">Root</option>
                                 <option value="beta">Beta</option>
-                                <option value="beta">Gamma</option>
+                                <option value="gamma">Gamma</option>
                             </select>
                         </div>
                     </div>
