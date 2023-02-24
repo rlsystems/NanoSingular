@@ -1,0 +1,67 @@
+.page-menu-layout {
+    display: grid;
+    grid-template-columns: minmax(max-content, 25rem) minmax(30rem, 90rem);
+    gap: 3rem;
+
+    @media only screen and (max-width: $bp-large) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.page-menu {
+    background-color: var(--color-paper-light);
+    border-radius: 1rem;
+    padding: 1.5rem 0;
+    height: min-content;
+
+    &__button {
+        text-align: start;
+        width: 100%;
+        cursor: pointer;
+        background-color: transparent;
+        padding: 1rem 2rem;
+        position: relative;
+        display: grid;
+        grid-template-columns: 2rem 1fr;
+        gap: .8rem;
+        color: var(--ink);
+        border: none;
+        font-family: $font-primary;
+        font-weight: 600;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        & svg {
+            height: 1.5rem;
+            width: 1.5rem;
+            color: var(--color-neutral);
+        }
+        &::after {
+            display: none;
+            content: "";
+            height: 100%;
+            width: 3px;
+            left: 0;
+            top: 0;
+            position: absolute;
+            background-color: var(--color-primary);
+            z-index: 5;
+        }
+
+        &.active {
+            background: var(--color-paper-light-x1);
+            color: var(--color-primary);
+            &::after {
+                display: block;
+            }
+        }
+
+        &:hover {   
+            background: var(--color-primary-semi);
+            color: var(--color-primary);
+            &::after {
+                display: block;
+            }
+        }
+    }
+}

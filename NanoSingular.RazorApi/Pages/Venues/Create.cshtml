@@ -1,0 +1,73 @@
+﻿@page
+@using NanoSingular.Application.Services.VenueService.DTOs;
+@model CreateVenueRequest
+
+@{
+    ViewData["Title"] = "Venues / Create";
+}
+
+
+<!-- Entity Header -->
+<div class="entity-header">
+
+    <!-- Title -->
+    <div class="entity-header__title-area">
+        <div class="avatar avatar--large">
+            <div class="avatar__image-area">
+                <svg>
+                    <use xlink:href="/assets/css/sprite.svg#icon-d-add"></use>
+                </svg>
+            </div>
+            <div class="avatar__title-group">
+                <div class="avatar__title-group__title">
+                    New Venue
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="panel">
+
+
+    <!-- Form Block -->
+    <form class="form-block form-block--inline-button" id="createVenueForm" method="post">        
+        @using (Html.BeginForm("CreateModel", "OnPostAsync", FormMethod.Post))
+        {
+            <div class="form-block__title">
+                Venue Details
+            </div>
+            <div class="form-block__fields">
+
+                <!-- Field Group -->
+                <div class="field-group">
+                    <div class="field-group__title">
+                        Venue Name
+                    </div>
+                    <div class="field-group__input-area">
+                        @Html.TextBoxFor(x=> x.Name, new{id="txtName"})
+                    </div>
+                </div>
+
+                <!-- Field Group -->
+                <div class="field-group">
+                    <div class="field-group__title">
+                        Venue Description
+                    </div>
+                    <div class="field-group__input-area">
+                        @Html.TextBoxFor(x=> x.Description, new{id="txtDescription"})
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-block__buttons">
+                <button class="btn small" type="submit" id="saveButton">Save Changes</button>
+            </div>
+        }
+
+
+    </form>
+
+</div>

@@ -35,7 +35,7 @@
 
             <a class="side-nav__links__link" asp-page="/Tenants/Index">
                 <svg>
-                    <use xlink:href="/assets/css/sprite.svg#icon-cogwheel"></use>
+                    <use xlink:href="/assets/css/sprite.svg#icon-blockchain"></use>
                 </svg>
             </a>
         </div>
@@ -82,14 +82,19 @@
                         </div>
                         <ul class="popper-tooltip__section__list">
                             <li class="popper-tooltip__section__list__item">
-                                <button class="popper-menu-button profile-option" value="profile">
+                                <a class="popper-menu-button profile-option" value="profile" asp-page="/Profile/Index" >
                                     Profile
-                                </button>
+                                </a>
+                            </li>
+                            <li class="popper-tooltip__section__list__item ">
+                                <a class="popper-menu-button profile-option" value="preferences" asp-page="/Profile/Index" asp-route-tab="preferences">
+                                    Preferences
+                                </a>
                             </li>
                             <li class="popper-tooltip__section__list__item divider">
-                                <button class="popper-menu-button profile-option" value="preferences">
-                                    Preferences
-                                </button>
+                                <a class="popper-menu-button profile-option" value="preferences" asp-page="/Profile/Index" asp-route-tab="password">
+                                    Change Password
+                                </a>
                             </li>
                             <li class="popper-tooltip__section__list__item">
                                 <form asp-area="Identity" asp-page="/Account/Logout" method="post">

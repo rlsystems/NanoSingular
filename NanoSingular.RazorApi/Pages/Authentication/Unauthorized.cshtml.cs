@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace NanoSingular.RazorApi.Pages.Tenants
+namespace NanoSingular.RazorApi.Pages.Authentication
 {
-    [Authorize(Roles = "root")]
-    public class IndexModel : PageModel
+    [AllowAnonymous]
+
+    public class Unauthorized : PageModel
     {
         public void OnGet()
         {

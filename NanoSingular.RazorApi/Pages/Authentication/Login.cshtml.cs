@@ -1,8 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
@@ -67,81 +63,5 @@ namespace NanoSingular.RazorApi.Pages.Authentication
 
             ReturnUrl = returnUrl;
         }
-
-        //public async Task<IActionResult> OnPostAsync(string returnUrl = null)
-        //{
-        //    returnUrl ??= Url.Content("~/");
-        //    if (returnUrl == "/")
-        //    {
-        //        returnUrl = "~/Venues/Index";
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-
-        //        ApplicationUser user = null;
-        //        var userName = Input.Email;
-        //        if (IsValidEmail(Input.Email)) // allow login with email too
-        //        {
-        //            user = await _userManager.FindByEmailAsync(Input.Email);
-
-        //            if (user == null)
-        //            {
-        //                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-        //                return Page();
-        //            }
-
-        //            userName = user.UserName;
-        //        }
-
-        //        //https://blog.dangl.me/archive/adding-custom-claims-when-logging-in-with-aspnet-core-identity-cookie/
-        //        var passwordIsCorrect = await _userManager.CheckPasswordAsync(user, Input.Password);
-
-        //        if (!passwordIsCorrect)
-        //        {
-        //            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-        //            return Page();
-        //        }
-
-        //        // adding custom tenant claim, this can potentially be moved to CustomClaimsCookieSignInHelper
-        //        // as mentioned in the blog
-        //        var customClaims = new[]
-        //        {
-        //            new Claim("logged_in_day", DateTime.UtcNow.DayOfWeek.ToString()),
-        //            new Claim("tenant", Input.Tenant)
-        //        };
-
-        //        var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(user);
-        //        if (claimsPrincipal.Identity is ClaimsIdentity claimsIdentity)
-        //        {
-        //            claimsIdentity.AddClaims(customClaims);
-        //        }
-
-        //        // see SignInAsync call with claims after the result.Succeeded condition
-        //        // END adding additional claims
-
-        //        // we don't really need this line, but we need to check the result, not sure if there is any alternative way of doing that
-        //        await _signInManager.Context.SignInAsync(IdentityConstants.ApplicationScheme, claimsPrincipal);
-
-
-        //        return Page();
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    return Page();
-        //}
-
-        //public bool IsValidEmail(string emailaddress)
-        //{
-        //    try
-        //    {
-        //        MailAddress m = new MailAddress(emailaddress);
-        //        return true;
-        //    }
-        //    catch (FormatException)
-        //    {
-        //        return false;
-        //    }
-        //}
     }
 }

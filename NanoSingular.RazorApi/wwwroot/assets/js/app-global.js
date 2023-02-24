@@ -1,7 +1,7 @@
 
 let style = getComputedStyle(document.body);
 
-
+// Theme Toggle ----------------------------------------------------------------------------------------
 const toggleTheme = () => {
     var element = document.body;
     element.classList.toggle("light");
@@ -13,7 +13,7 @@ if (theme_toggle){
 }
 
 
-// switchery ------------
+// Switchery ----------------------------------------------------------------------------------------
 const switcheryElements = Array.prototype.slice.call(document.querySelectorAll('.switchery-switch'));
 switcheryElements.forEach(function(element) {
    new Switchery(element, { color: style.getPropertyValue('--color-primary-dark'), jackColor: style.getPropertyValue('--color-primary'), secondaryColor: style.getPropertyValue('--color-grey'), jackSecondaryColor: style.getPropertyValue('--color-grey-dark') });
@@ -24,7 +24,6 @@ switcheryElements.forEach(function(element) {
 // View Options Popper ----------------------------------------------------------------------------------------
 const optionsButton = document.querySelector('#options-button');
 const optionsTooltip = document.querySelector('#options-tooltip');
-
 const optionsPopper = Popper.createPopper(optionsButton, optionsTooltip, {
     placement: 'bottom-end',
 });
@@ -80,7 +79,6 @@ tableViewOption.forEach(item => {
 // Profile Popper ----------------------------------------------------------------------------------------
 const profileButton = document.querySelector('#profile-button');
 const profileTooltip = document.querySelector('#profile-tooltip');
-
 const profilePopper = Popper.createPopper(profileButton, profileTooltip, {
     placement: 'bottom-end',
 });
@@ -101,13 +99,6 @@ document.addEventListener('click', evt => {
     if (isProfileButton || isProfileTooltip) return false;
     hideProfilePopper();
 });
-function hideProfilePopper() {
-    profileTooltip.removeAttribute('data-show');
-    profileButton.classList.remove('active');
-}
-
-
-
 
 const profileOption = [...document.querySelectorAll('.profile-option')];
 profileOption.forEach(item => {
@@ -116,8 +107,41 @@ profileOption.forEach(item => {
     });
 })
 
+function hideProfilePopper() {
+    profileTooltip.removeAttribute('data-show');
+    profileButton.classList.remove('active');
+}
 
 
 
+// Tab Panels ----------------------------------------------------------------------------------------
+const tabPanels = [...document.querySelectorAll('.tab-panel')];
+const tabButtons = [...document.querySelectorAll('.tab-button')];
+tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        let tab = button.getAttribute("tab");
+        setTab(tab);
+    });
+})
+
+
+function setTab(tab){
+    // buttons
+    tabButtons.forEach(button => {
+        button.classList.remove('active');
+    })
+    const targetButton = document.querySelector('.tab-button[tab="' + tab + '"]');
+    targetButton.classList.add('active');
+
+    // panels
+    tabPanels.forEach(panel => {
+        panel.classList.remove('active');
+    })
+    const targetTab = document.getElementById(tab);
+    targetTab.classList.add('active');
+
+    window.history.replaceState(null, null, '?tab=' + tab);
+
+}
 
 

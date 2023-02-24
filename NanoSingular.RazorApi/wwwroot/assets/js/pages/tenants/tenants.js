@@ -1,17 +1,9 @@
 ﻿$(document).ready(function () {
 
+    // page components
     const body = document.querySelector("body");
-
     const tenantModal = document.querySelector("#tenantModal");
     const addTenantButton = document.querySelector("#addTenantButton");
-
-    // add new tenant button
-    addTenantButton.addEventListener('click', () => {
-        tenantModal.style.display = 'flex';
-        body.classList.add('no-scroll');
-        initializeAddTenant();
-    });
-
 
     // modal fields
     const tenantKey = document.getElementById("tenantKey");
@@ -20,28 +12,29 @@
     const password = document.getElementById("password");
 
     const isActive = document.querySelector("#isActive");
-
-
     const addTenantSubmit = document.querySelector("#addTenantSubmit");
     const editTenantSubmit = document.querySelector("#editTenantSubmit");
 
+    // add new tenant button
+    addTenantButton.addEventListener('click', () => {
+        tenantModal.style.display = 'flex';
+        body.classList.add('no-scroll');
+        initializeAddTenant();
+    });
 
-    // initialize add tenant modal
+    // initialize add tenant 
     function initializeAddTenant() {
         initModalAdd();
         activeTenantBlock.style.display = "none";
-
         document.getElementById('tenantModalContent').reset();
-
     };
 
-
-    // initialize edit tenant modal
+    // initialize edit tenant 
     let editTenantId = null;
     function initializeEditTenant(item) {
-        initModalEdit();     
-        editTenantId = item.tenantKey;
-        tenantName.value = item.tenantName;
+        initModalEdit();
+        editTenantId = item.id;
+        tenantName.value = item.name;
 
         isActive.checked = !item.isActive; //set to opposite state then trigger click
         isActive.click();
@@ -58,7 +51,7 @@
     });
 
 
-    // create a new Tenant
+    // create a new tenant
     function addTenant() {
 
         var vm = {
@@ -67,7 +60,6 @@
             adminEmail: email.value,
             password: password.value,
         };
-
 
         $.ajax({
             url: "/api/tenants/",
@@ -90,17 +82,18 @@
     };
 
 
-    // edit an existing user
+    // edit an existing tenant
     function editTenant() {
 
         var vm = {
+            id: editTenantId,
             name: tenantName.value,
             isActive: isActive.checked,
         };
 
 
         $.ajax({
-            url: "/api/tenants/" + editTenantId,
+            url: "/api/tenants/",
             contentType: 'application/json',
             method: "PUT",
             data: JSON.stringify(vm),
@@ -108,9 +101,9 @@
             .done(function (result) {
                 if (result.succeeded) {
                     reloadGrid();
-                    closeModals();
+                    closeModals(); // global generic function 
                 } else {
-                    console.log('register failed');
+                    console.log('edit tenant failed');
                     console.log(result.messages);
                 }
             })
@@ -120,9 +113,7 @@
     };
 
 
-
-
-
+    // reload the main grid
     const reloadGrid = () => {
 
         fieldsGenerated = [];
@@ -149,15 +140,12 @@
             itemTemplate: function (value) {
                 if (value == true) {
                     return "<span class='green-text'>Active</span>"
-
                 } else {
-                    return "Disabled"
-
+                    return "<span class='red-text'>Disabled</span>"
                 }
             }
         }
         fieldsGenerated.push(colActive);
-
 
         //Edit Button
         var editControl = {
@@ -165,8 +153,7 @@
             title: "Edit",
             align: "center",
             itemTemplate: function (value, item) {
-
-                if (item.tenantKey == "root")
+                if (item.id == "root")
                     return "<button class='btn-secondary' disabled>N/A <span class='blue-text'>(You)</span></button>"
 
                 return $("<button class='btn-secondary'>").text("Edit")
@@ -178,8 +165,6 @@
             }
         }
         fieldsGenerated.push(editControl);
-
-
 
         //Display the Grid
         $("#jsGrid").jsGrid({
@@ -203,5 +188,5 @@
         });
     }
 
-    reloadGrid();
+    reloadGrid(); // initial page load
 });

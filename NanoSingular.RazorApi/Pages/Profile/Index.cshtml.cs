@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace NanoSingular.RazorApi.Pages.Tenants
+namespace NanoSingular.RazorApi.Pages.Profile
 {
-    [Authorize(Roles = "root")]
     public class IndexModel : PageModel
     {
         public void OnGet()

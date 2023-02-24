@@ -10,7 +10,6 @@
     display: none;
     box-shadow: $shadow-medium;
   
-
     &[data-show] {
         display: block;
     }
@@ -65,14 +64,12 @@
         &__list {
           list-style: none;
           width: 100%;
-
           &__item {
             &.divider {
                 padding-bottom: 1rem;
                 margin-bottom: 1rem;
                 border-bottom: 1px solid var(--color-paper-light-x2);
             }
-
           }
         }
     }
@@ -101,11 +98,14 @@
     border-radius: 1rem;
     font-weight: 700;
     text-align: start;
+    text-decoration: none;
+    display: inline-block;
+
     &:hover {
         background-color: var(--color-paper-light-x2);
     }
 
     &.active {
-        color: $color-primary;
+        color: var(--color-primary);
     }
 }

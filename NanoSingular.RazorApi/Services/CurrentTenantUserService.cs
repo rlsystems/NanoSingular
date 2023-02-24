@@ -23,7 +23,7 @@ namespace NanoSingular.RazorApi.Services
             if (tenantInfo != null)
             {
                 TenantId = tenant;
-                UserId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString(); // will be null on login
+                UserId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString(); // this is the user GUID, it will be null on login
                 return true;
             }
             else

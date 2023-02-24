@@ -1,17 +1,9 @@
 $(document).ready(function () {
 
+    // page components
     const body = document.querySelector("body");
-
     const userModal = document.querySelector("#userModal");
     const addUserButton = document.querySelector("#addUserButton");
-
-    // add new user button
-    addUserButton.addEventListener('click', () => {
-        userModal.style.display = 'flex';
-        body.classList.add('no-scroll');
-        initializeAddUser();
-    });
-
 
     // modal fields
     const firstName = document.getElementById("firstName");
@@ -30,35 +22,34 @@ $(document).ready(function () {
     const editUserSubmit = document.querySelector("#editUserSubmit");
     const deleteUserSubmit = document.querySelector("#deleteUserSubmit");
 
-    //reloadButton
-    const reloadButton = document.querySelector("#reloadButton");
-    reloadButton.addEventListener('click', (evt) => {
-        reloadGrid();
+    // add new user button
+    addUserButton.addEventListener('click', () => {
+        userModal.style.display = 'flex';
+        body.classList.add('no-scroll');
+        initializeAddUser();
     });
-
 
     // initialize add user modal
     function initializeAddUser() {
-        initModalAdd();
+        initModalAdd(); // global function to hide edit-only fields
         activeUserBlock.style.display = "none";
 
         document.getElementById('userModalContent').reset();
         basicRole.checked = true;
-
     };
 
 
     // initialize edit user modal
     let editUserId = null;
     function initializeEditUser(item) {
-        initModalEdit();
+        initModalEdit(); // global function to hide add-only fields
         editUserId = item.id;
         firstName.value = item.firstName;
         lastName.value = item.lastName;
         email.value = item.email;
         phoneNumber.value = item.phoneNumber;
-        isActive.checked = !item.isActive; //set to opposite state then trigger click
-        isActive.click(); 
+        isActive.checked = !item.isActive; // switchery hack - set to opposite state then trigger click for initial state setting
+        isActive.click();
 
         switch (item.roleId) {
             case "admin":
@@ -142,7 +133,6 @@ $(document).ready(function () {
             }
         }
 
-
         var vm = {
             firstName: firstName.value,
             lastName: lastName.value,
@@ -151,7 +141,6 @@ $(document).ready(function () {
             isActive: isActive.checked,
             roleId: roleId,
         };
-
 
         $.ajax({
             url: "/api/identity/user/" + editUserId,
@@ -173,34 +162,29 @@ $(document).ready(function () {
             });
     };
 
-    //delete user
 
-    //Delete an Existing Departure
+    // delete a user
     function deleteUser() {
-
         $.ajax({
             url: "/api/identity/user/" + editUserId,
             method: "DELETE",
         })
-        .done(function (result) {
-            if (result.succeeded) {
-                reloadGrid();
-                closeModals();
-            } else {
-                console.log('delete failed');
-                console.log(result.messages);
-            }
-        })
-        .fail(function () {
-            console.log("fail")
-        });
+            .done(function (result) {
+                if (result.succeeded) {
+                    reloadGrid();
+                    closeModals();
+                } else {
+                    console.log('delete failed');
+                    console.log(result.messages);
+                }
+            })
+            .fail(function () {
+                console.log("fail")
+            });
     };
 
 
-
-
-
-
+    // reload the main grid
     const reloadGrid = () => {
 
         fieldsGenerated = [];
@@ -233,19 +217,14 @@ $(document).ready(function () {
             title: "Active",
             type: "text",
             itemTemplate: function (value) {
-
                 if (value == true) {
-                    return "<span class='green-text'>Active</span>" 
-
+                    return "<span class='green-text'>Active</span>"
                 } else {
-                    return "Disabled" 
-
+                    return "<span class='red-text'>Disabled</span>"
                 }
-
             }
         }
         fieldsGenerated.push(colActive);
-
 
         //Edit Button
         var editControl = {
@@ -253,9 +232,8 @@ $(document).ready(function () {
             title: "Edit",
             align: "center",
             itemTemplate: function (value, item) {
-
                 if (item.id == currentUserId)
-                    return "<button class='btn-secondary' disabled>N/A <span class='blue-text'>(You)</span></button>" 
+                    return "<button class='btn-secondary' disabled>N/A <span class='blue-text'>(You)</span></button>"
 
                 return $("<button class='btn-secondary'>").text("Edit")
                     .on("click", function () {
@@ -268,8 +246,7 @@ $(document).ready(function () {
         fieldsGenerated.push(editControl);
 
 
-
-        //Display the Grid
+        // display the grid
         $("#jsGrid").jsGrid({
             height: "100%",
             width: "100%",
@@ -291,5 +268,5 @@ $(document).ready(function () {
         });
     }
 
-    reloadGrid();
+    reloadGrid();  // initial page load
 });

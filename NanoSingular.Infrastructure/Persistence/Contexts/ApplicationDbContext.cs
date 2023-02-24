@@ -61,7 +61,16 @@ namespace NanoSingular.Infrastructure.Persistence.Contexts
         // Handle audit fields (createdOn, createdBy, modifiedBy, modifiedOn) and handle soft delete on save changes
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
- 
+            foreach (var entry in ChangeTracker.Entries<IMustHaveTenant>().ToList()) // Write tenant Id to tables with IMustHaveTenant
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                    case EntityState.Modified:
+                        entry.Entity.TenantId = CurrentTenantId; // Note: ApplicationUser doesnt implement IMustHaveTenant. --Because, when the root user creates a new tenant, the admin user created for that new tenant would have 'root' as their tenant Id. For that reason ApplicationUser is handled differntly, it has its own query filter and the tenantId field is assigned manually.
+                        break;
+                }
+            }
 
             // it has to be IAuditableEntity not AuditableEntity
             foreach (var entry in ChangeTracker.Entries<IAuditableEntity>().ToList()) // Auditable fields / soft delete on tables with IAuditableEntity

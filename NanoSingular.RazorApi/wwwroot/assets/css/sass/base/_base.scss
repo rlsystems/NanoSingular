@@ -17,19 +17,29 @@ main {
 }
 
 body {
+  font-family: $font-primary;
+  color: var(--color-ink);
+  background-color: var(--color-paper);
+  font-weight: 400;
+  font-size: 1.6rem;
+  height: 100%;
+  position: relative;
 
-  //constant
+  // constant -----------------------------------------
   --color-primary: #0095ff;
   --color-primary-light: #3eafff;
   --color-primary-dark: #12507c;
 
   --color-green:#00c95a;
+  --color-red:#ff226b;
+  --color-gold: rgb(255, 217, 0);
 
-
+  --color-white: #fff;
   --color-grey: #e2e2e2;
   --color-grey-dark: #949494;
+  --color-black: #000000;
 
-  //variable
+  // variable ------------------------------------------
   --color-ink: #fff;
   --color-paper: rgb(23, 28, 36);
   --color-paper-input: rgb(28, 36, 45);
@@ -40,14 +50,7 @@ body {
   --color-paper-light-x3: rgb(70, 88, 109);
 
   --color-neutral: rgb(140, 163, 186);
-
-  font-family: $font-primary;
-  color: var(--color-ink);
-  background-color: var(--color-paper);
-  font-weight: 400;
-  font-size: 1.6rem;
-  height: 100%;
-  position: relative;
+  --color-primary-semi: #223445; // semi-transparent effect
 
   &.light {
     --color-ink: black;
@@ -60,7 +63,10 @@ body {
     --color-paper-light-x3: rgb(199, 207, 216);
 
     --color-neutral: rgb(74, 91, 112);
+    --color-primary-semi: #bfe4ff;
+
   }
+
 }
 
 input {
