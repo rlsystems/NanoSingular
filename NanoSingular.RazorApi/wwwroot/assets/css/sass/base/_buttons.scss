@@ -58,6 +58,17 @@
         }
     }
 
+    &--red {
+        background-color: transparent;
+        color: var(--color-neutral);
+        border: 2px solid var(--color-paper-light-x2);
+        &:hover {
+            color: var(--color-ink);
+            border: 2px solid var(--color-red);
+            background-color: transparent;
+        }
+    }
+
     &--small {
         height: 4rem;
         padding: 0rem 2rem;
@@ -86,6 +97,8 @@
     cursor: pointer;
     background-color: transparent;
     transition: all 0.1s;
+    display: inline-block;
+    text-decoration: none;
 
     &:hover {
         color: var(--color-ink);

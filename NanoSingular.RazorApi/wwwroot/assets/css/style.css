@@ -121,6 +121,14 @@ input {
       color: var(--color-ink);
       border: 2px solid var(--color-primary);
       background-color: transparent; }
+  .btn--red {
+    background-color: transparent;
+    color: var(--color-neutral);
+    border: 2px solid var(--color-paper-light-x2); }
+    .btn--red:hover {
+      color: var(--color-ink);
+      border: 2px solid var(--color-red);
+      background-color: transparent; }
   .btn--small {
     height: 4rem;
     padding: 0rem 2rem; }
@@ -140,7 +148,9 @@ input {
   font-weight: 600;
   cursor: pointer;
   background-color: transparent;
-  transition: all 0.1s; }
+  transition: all 0.1s;
+  display: inline-block;
+  text-decoration: none; }
   .btn-secondary:hover {
     color: var(--color-ink);
     border-color: var(--color-primary);
@@ -719,7 +729,8 @@ table {
   @media only screen and (max-width: 62.5em) {
     .entity-header {
       flex-direction: column;
-      padding-bottom: 2rem; } }
+      padding-bottom: 2rem;
+      align-items: flex-start; } }
   .entity-header__title-area .avatar__image-area {
     transform: translateY(-2rem); }
   .entity-header__navigation-area {
@@ -771,11 +782,8 @@ table {
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--color-paper-light-x2); }
 
-.form-block__fields:not(:last-child) {
-  margin-bottom: 2rem; }
-
 .form-block__fields > div {
-  margin-bottom: 1rem; }
+  margin-bottom: 2rem; }
 
 .form-block__fields.flex-fields {
   display: flex;
@@ -791,10 +799,12 @@ table {
     .form-block__fields.grid-fields-2 {
       grid-template-columns: 1fr; } }
 
-.form-block__buttons {
-  padding-top: 1rem;
+.form-block__cta {
+  margin-top: 4rem;
   display: flex;
   justify-content: flex-end; }
+  .form-block__cta button:not(:last-child) {
+    margin-right: 1rem; }
 
 .paper-input {
   background-color: var(--color-paper-light);
@@ -818,6 +828,11 @@ table {
   margin-bottom: 1rem; }
   .field-group__title.large {
     font-size: 1.6rem; }
+
+.field-group__input-area .red-text {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  display: block; }
 
 .radio-group {
   display: flex;

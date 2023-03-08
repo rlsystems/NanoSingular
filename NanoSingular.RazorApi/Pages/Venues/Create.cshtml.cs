@@ -1,6 +1,8 @@
 
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using NanoSingular.Application.Services.VenueService;
 using NanoSingular.Application.Services.VenueService.DTOs;
 
@@ -15,26 +17,25 @@ namespace NanoSingular.RazorApi.Pages.Venues
             _venueService = venueService;
         }
 
+        [BindProperty]
+        public CreateVenueRequest CreateVenueRequest { get; set; }
+
+
         public void OnGet()
         {
         }
 
 
-        public async Task OnPostAsync(CreateVenueRequest request)
+        public async Task<IActionResult> OnPostAsync()
         {
+            if (ModelState.IsValid)
+            {
+                await _venueService.CreateVenueAsync(CreateVenueRequest);
+                return RedirectToPage("./Index");
 
-            var CreateVenueRequest = new CreateVenueRequest();
-            CreateVenueRequest.Name = Request.Form["venueName"];
-            CreateVenueRequest.Description = Request.Form["venueDescription"];
+            }
 
-            await _venueService.CreateVenueAsync(CreateVenueRequest);
+            return Page();
         }
-
-        //public async Task SaveForm(CreateVenueRequest request)
-        //{
-
-        //    var test = "test";
-        //}
-
     }
 }

@@ -30,11 +30,8 @@
             title: "Edit",
             align: "center",
             itemTemplate: function (value, item) {
-
-                return $("<button class='btn-secondary'>").text("Edit")
-                    .on("click", function () {
-                        window.location.href = "/" + item.id;
-                    });
+                return "<a class='btn-secondary' href='"+ "Venues/Edit?id=" + item.id +"'>Edit</a>"
+                
             }
         }
         fieldsGenerated.push(editControl);

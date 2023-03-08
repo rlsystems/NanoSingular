@@ -27,6 +27,8 @@ namespace NanoSingular.Infrastructure.Mapper
             CreateMap<CreateVenueRequest, Venue>();
             CreateMap<UpdateVenueRequest, Venue>();
 
+            CreateMap<VenueDTO, UpdateVenueRequest>();
+
 
             // add new entity mappings here...
 

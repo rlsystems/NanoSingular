@@ -1,9 +1,9 @@
 ﻿@page
 @using NanoSingular.Application.Services.VenueService.DTOs;
-@model NanoSingular.RazorApi.Pages.Venues.CreateModel
+@model NanoSingular.RazorApi.Pages.Venues.EditModel
 
 @{
-    ViewData["Title"] = "Venues / Create";
+    ViewData["Title"] = "Venues / Edit";
 }
 
 
@@ -20,7 +20,7 @@
             </div>
             <div class="avatar__title-group">
                 <div class="avatar__title-group__title">
-                    New Venue
+                    Edit Venue
                 </div>
             </div>
         </div>
@@ -33,7 +33,7 @@
 
 
     <!-- Form Block -->
-    <form class="form-block form-block--inline-button" id="createVenueForm" method="post">
+    <form class="form-block" id="editVenueForm" method="post">
         <div class="form-block__title">
             Venue Details
         </div>
@@ -45,8 +45,8 @@
                     Venue Name
                 </div>
                 <div class="field-group__input-area">
-                    <input asp-for="CreateVenueRequest.Name"/>
-                    <span asp-validation-for="CreateVenueRequest.Name" class="red-text"></span>
+                    <input asp-for="UpdateVenueRequest.Name" />
+                    <span asp-validation-for="UpdateVenueRequest.Name" class="red-text"></span>
                 </div>
             </div>
 
@@ -56,15 +56,16 @@
                     Venue Description
                 </div>
                 <div class="field-group__input-area">
-                    <input asp-for="CreateVenueRequest.Description" />
-                    <span asp-validation-for="CreateVenueRequest.Description" class="red-text"></span>
+                    <input asp-for="UpdateVenueRequest.Description" />
+                    <span asp-validation-for="UpdateVenueRequest.Description" class="red-text"></span>
                 </div>
-                
+
             </div>
 
         </div>
-        <div class="form-block__buttons">
-            <button class="btn small" type="submit" id="saveButton">Save Changes</button>
+        <div class="form-block__cta">
+            <button class="btn small btn--outline btn--red" type="submit" name="action" value="delete">Delete</button>
+            <button class="btn small" type="submit" name="action" value="save">Save Changes</button>
         </div>
     </form>
 
@@ -74,3 +75,5 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+
