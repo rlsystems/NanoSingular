@@ -19,12 +19,12 @@ namespace NanoSingular.RazorApi.Pages.Venues
         {
             _venueService = venueService;
             _mapper = mapper;
-            UpdateVenueRequest = new UpdateVenueRequest();
+            updateVenueRequest = new UpdateVenueRequest();
         }
 
 
         [BindProperty]
-        public UpdateVenueRequest UpdateVenueRequest { get; set; }
+        public UpdateVenueRequest updateVenueRequest { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
@@ -39,10 +39,9 @@ namespace NanoSingular.RazorApi.Pages.Venues
                 return NotFound();
 
 
-            UpdateVenueRequest = _mapper.Map(result.Data, UpdateVenueRequest); // map response to dto
+            updateVenueRequest = _mapper.Map(result.Data, updateVenueRequest); // map response to dto
 
             return Page();
-
 
         }
 
@@ -58,7 +57,7 @@ namespace NanoSingular.RazorApi.Pages.Venues
                 case "save":
                     if (ModelState.IsValid)
                     {
-                        await _venueService.UpdateVenueAsync(UpdateVenueRequest, id);
+                        await _venueService.UpdateVenueAsync(updateVenueRequest, id);
                         return RedirectToPage("./Index");
                     }
                     return Page();

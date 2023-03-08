@@ -1,0 +1,33 @@
+﻿@page
+@model NanoSingular.RazorApi.Pages.Profile._PreferencesModel
+@{
+}
+
+
+<!-- Panel (Preferences) -->
+<div class="panel tab-panel" id="preferences">
+    <!-- Form Block -->
+    <div class="form-block">
+        <div class="form-block__title">
+            Update your preferences
+        </div>
+
+
+        <div class="form-block__fields ">
+
+            <!-- Field Group -->
+            <div class="field-group label-horizontal">
+                <div class="field-group__title">
+                    Dark Mode Default
+                </div>
+                <div class="field-group__input-area">
+                    <input type="checkbox" class="switchery-switch" checked id="isDarkDefault" />
+                </div>
+            </div>
+
+        </div>
+        <div class="form-block__cta">
+            <button class="btn small" disabled>Save Changes</button>
+        </div>
+    </div>
+</div>

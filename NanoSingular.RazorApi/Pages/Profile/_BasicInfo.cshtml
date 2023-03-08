@@ -1,0 +1,84 @@
+﻿@page
+@model NanoSingular.RazorApi.Pages.Profile._BasicInfoModel
+@{
+}
+
+
+<!-- Panel (Basic Info) -->
+<div class="panel tab-panel active" id="basicInfo">
+    <!-- Form Block -->
+    <form class="form-block" asp-action="BasicInfo">
+        <div class="form-block__title">
+            Edit your account information
+        </div>
+        <div class="form-block__fields">
+            <div class="avatar avatar--large">
+                <div class="avatar__image-area">
+                    <svg>
+                        <use xlink:href="/assets/css/sprite.svg#icon-user"></use>
+                    </svg>
+                </div>
+                <div class="avatar__cta">
+                    <svg>
+                        <use xlink:href="/assets/css/sprite.svg#icon-camera-2"></use>
+                    </svg>
+                </div>
+                <div class="avatar__title-group">
+                    <div class="avatar__title-group__title">
+                        Jean-Luc Picard
+                    </div>
+                    <div class="avatar__title-group__sub">
+                        Admin Level User
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-block__fields grid-fields-2">
+
+            <!-- Field Group -->
+            <div class="field-group">
+                <div class="field-group__title">
+                    First Name
+                </div>
+                <div class="field-group__input-area">
+                    <input type="text" placeholder="First Name">
+                </div>
+            </div>
+
+            <!-- Field Group -->
+            <div class="field-group">
+                <div class="field-group__title">
+                    Last Name
+                </div>
+                <div class="field-group__input-area">
+                    <input type="text" placeholder="Last Name">
+                </div>
+            </div>
+
+            <!-- Field Group -->
+            <div class="field-group">
+                <div class="field-group__title">
+                    Email
+                </div>
+                <div class="field-group__input-area">
+                    <input type="text" placeholder="Email">
+                </div>
+            </div>
+
+            <!-- Field Group -->
+            <div class="field-group">
+                <div class="field-group__title">
+                    Phone Number
+                </div>
+                <div class="field-group__input-area">
+                    <input type="text" placeholder="Phone Number">
+                </div>
+            </div>
+
+        </div>
+        <div class="form-block__cta">
+            <button class="btn small" type="submit">Save Changes</button>
+        </div>
+    </form>
+</div>
